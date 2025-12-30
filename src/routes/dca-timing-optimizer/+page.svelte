@@ -202,6 +202,11 @@
       <p class="text-sm text-gray-600">
         S&P 500 Investment Day Performance Study
       </p>
+      {#if data.metadata?.lastUpdated}
+        <p class="text-xs text-gray-500 mt-1">
+          Last updated {data.metadata.lastUpdated} • Source {data.metadata.source}
+        </p>
+      {/if}
     </div>
     <button
       onclick={copyShareUrl}
