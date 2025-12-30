@@ -177,9 +177,16 @@
 
 <main class="p-4 md:p-8 max-w-4xl mx-auto">
   <div class="flex items-center justify-between pb-3">
-    <h1 class="text-2xl text-balance font-medium">
-      S&P 500 Dollar Cost Averaging (DCA) Calculator
-    </h1>
+    <div>
+      <h1 class="text-2xl text-balance font-medium">
+        S&P 500 Dollar Cost Averaging (DCA) Calculator
+      </h1>
+      {#if data.metadata?.lastUpdated}
+        <p class="text-xs text-gray-500 mt-1">
+          Last updated {data.metadata.lastUpdated} • Source {data.metadata.source}
+        </p>
+      {/if}
+    </div>
     <button
       onclick={copyShareUrl}
       class="border border-gray-300 h-12 px-4 hover:bg-gray-100 flex items-center gap-2"

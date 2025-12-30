@@ -1,8 +1,22 @@
-import { loadMarketData } from '$lib/server/marketData';
+import { getSp500Dataset } from '$lib/server/sp500Dataset';
 
 export async function load() {
+  const { parsedData, metadata } = getSp500Dataset();
+
+  if (!parsedData.length) {
+    return {
+      parsedData: [],
+      recessionPeriods: [],
+      recessionStats: [],
+      metadata
+    };
+  }
+
   try {
-    const parsedData = loadMarketData({ sortByDate: true });
+    const sortedData = [...parsedData].sort(
+      (a: any, b: any) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
     // Official US Recession Periods (NBER dates)
     const recessionPeriods = [
@@ -41,8 +55,8 @@ export async function load() {
     ];
 
     // Filter recession periods to those covered by our data
-    const dataStartDate = new Date(parsedData[0].date);
-    const dataEndDate = new Date(parsedData[parsedData.length - 1].date);
+    const dataStartDate = new Date(sortedData[0].date);
+    const dataEndDate = new Date(sortedData[sortedData.length - 1].date);
 
     const availableRecessions = recessionPeriods.filter(recession => {
       const recessionStart = new Date(recession.start);
@@ -56,7 +70,7 @@ export async function load() {
       const recessionEnd = new Date(recession.end);
 
       // Get S&P 500 data for recession period
-      const recessionData = parsedData.filter((item: any) => {
+      const recessionData = sortedData.filter((item: any) => {
         const itemDate = new Date(item.date);
         return itemDate >= recessionStart && itemDate <= recessionEnd;
       });
@@ -64,8 +78,8 @@ export async function load() {
       if (recessionData.length === 0) return null;
 
       // Find data points closest to start and end
-      const startPrice = parsedData.find((item: any) => new Date(item.date) >= recessionStart)?.value || 0;
-      const endPrice = parsedData.find((item: any) => new Date(item.date) >= recessionEnd)?.value || 0;
+      const startPrice = sortedData.find((item: any) => new Date(item.date) >= recessionStart)?.value || 0;
+      const endPrice = sortedData.find((item: any) => new Date(item.date) >= recessionEnd)?.value || 0;
 
       const priceChange = ((endPrice - startPrice) / startPrice) * 100;
 
@@ -85,16 +99,18 @@ export async function load() {
     }).filter(Boolean);
 
     return {
-      parsedData,
+      parsedData: sortedData,
       recessionPeriods: availableRecessions,
-      recessionStats
+      recessionStats,
+      metadata
     };
   } catch (error) {
-    console.error('Error parsing CSV:', error);
+    console.error('Error building recession data:', error);
     return {
-      parsedData: [],
+      parsedData,
       recessionPeriods: [],
-      recessionStats: []
+      recessionStats: [],
+      metadata
     };
   }
 }

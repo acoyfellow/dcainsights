@@ -1,8 +1,21 @@
-import { loadMarketData } from '$lib/server/marketData';
+import { getSp500Dataset } from '$lib/server/sp500Dataset';
 
 export async function load() {
+  const { parsedData, metadata } = getSp500Dataset();
+
+  if (!parsedData.length) {
+    return {
+      parsedData: [],
+      bearMarketPeriods: [],
+      metadata
+    };
+  }
+
   try {
-    const parsedData = loadMarketData({ sortByDate: true });
+    const sortedData = [...parsedData].sort(
+      (a: any, b: any) =>
+        new Date(a.date).getTime() - new Date(b.date).getTime()
+    );
 
     // Identify bear market periods (20%+ decline from recent peak)
     const bearMarketPeriods: Array<{
@@ -15,14 +28,14 @@ export async function load() {
       name: string;
     }> = [];
 
-    let currentPeak = parsedData[0].value;
-    let currentPeakDate = parsedData[0].date;
+    let currentPeak = sortedData[0].value;
+    let currentPeakDate = sortedData[0].date;
     let inBearMarket = false;
     let bearStartDate = '';
     let bearStartValue = 0;
 
-    for (let i = 1; i < parsedData.length; i++) {
-      const current = parsedData[i];
+    for (let i = 1; i < sortedData.length; i++) {
+      const current = sortedData[i];
 
       // Update peak if we hit a new high
       if (current.value > currentPeak) {
@@ -31,19 +44,19 @@ export async function load() {
 
         // If we were in a bear market and hit a new high, bear market is over
         if (inBearMarket) {
-          const prevData = parsedData[i - 1];
+          const prevData = sortedData[i - 1];
           const durationDays = Math.floor((new Date(prevData.date).getTime() - new Date(bearStartDate).getTime()) / (1000 * 60 * 60 * 24));
 
           bearMarketPeriods.push({
             start: bearStartDate,
             end: prevData.date,
             peakValue: bearStartValue,
-            troughValue: Math.min(...parsedData.slice(
-              parsedData.findIndex(d => d.date === bearStartDate),
+            troughValue: Math.min(...sortedData.slice(
+              sortedData.findIndex(d => d.date === bearStartDate),
               i
             ).map(d => d.value)),
-            decline: ((bearStartValue - Math.min(...parsedData.slice(
-              parsedData.findIndex(d => d.date === bearStartDate),
+            decline: ((bearStartValue - Math.min(...sortedData.slice(
+              sortedData.findIndex(d => d.date === bearStartDate),
               i
             ).map(d => d.value))) / bearStartValue) * 100,
             duration: durationDays,
@@ -66,18 +79,18 @@ export async function load() {
 
     // Handle case where bear market extends to end of data
     if (inBearMarket) {
-      const lastData = parsedData[parsedData.length - 1];
+      const lastData = sortedData[sortedData.length - 1];
       const durationDays = Math.floor((new Date(lastData.date).getTime() - new Date(bearStartDate).getTime()) / (1000 * 60 * 60 * 24));
 
       bearMarketPeriods.push({
         start: bearStartDate,
         end: lastData.date,
         peakValue: bearStartValue,
-        troughValue: Math.min(...parsedData.slice(
-          parsedData.findIndex(d => d.date === bearStartDate)
+        troughValue: Math.min(...sortedData.slice(
+          sortedData.findIndex(d => d.date === bearStartDate)
         ).map(d => d.value)),
-        decline: ((bearStartValue - Math.min(...parsedData.slice(
-          parsedData.findIndex(d => d.date === bearStartDate)
+        decline: ((bearStartValue - Math.min(...sortedData.slice(
+          sortedData.findIndex(d => d.date === bearStartDate)
         ).map(d => d.value))) / bearStartValue) * 100,
         duration: durationDays,
         name: `Bear Market ${bearMarketPeriods.length + 1}`
@@ -99,14 +112,16 @@ export async function load() {
     });
 
     return {
-      parsedData,
-      bearMarketPeriods
+      parsedData: sortedData,
+      bearMarketPeriods,
+      metadata
     };
   } catch (error) {
-    console.error('Error parsing CSV:', error);
+    console.error('Error building bear market data:', error);
     return {
-      parsedData: [],
-      bearMarketPeriods: []
+      parsedData,
+      bearMarketPeriods: [],
+      metadata
     };
   }
 }

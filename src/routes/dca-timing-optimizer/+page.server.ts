@@ -1,16 +1,21 @@
-import { loadMarketData } from '$lib/server/marketData';
+import { getSp500Dataset } from '$lib/server/sp500Dataset';
 
 export async function load() {
-  try {
-    const parsedData = loadMarketData({ sortByDate: true });
+  const { parsedData, metadata } = getSp500Dataset();
 
+  if (!parsedData.length) {
     return {
-      parsedData
-    };
-  } catch (error) {
-    console.error('Error parsing CSV:', error);
-    return {
-      data: []
+      parsedData: [],
+      metadata
     };
   }
+
+  const sortedData = [...parsedData].sort(
+    (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()
+  );
+
+  return {
+    parsedData: sortedData,
+    metadata
+  };
 }
