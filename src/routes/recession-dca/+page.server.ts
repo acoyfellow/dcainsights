@@ -72,7 +72,7 @@ export async function load() {
       // Get S&P 500 data for recession period
       const recessionData = sortedData.filter((item: any) => {
         const itemDate = new Date(item.date);
-        return itemDate >= recessionStart && itemDate <= itemDate;
+        return itemDate >= recessionStart && itemDate <= recessionEnd;
       });
 
       if (recessionData.length === 0) return null;
