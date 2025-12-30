@@ -1,33 +1,17 @@
-import csvData from '../../../static/s&p-500.csv?raw';
-
+import { getSp500Dataset } from '$lib/server/sp500Dataset';
 
 export async function load() {
-  try {
-    const rows = csvData.trim().split("\n");
-    const headers = rows
-      .shift()
-      ?.split(",")
-      .map((h) => h.trim().replace(/\r/g, ""));
+  const { parsedData, metadata } = getSp500Dataset();
 
-    if (!headers) return { data: [] };
-
-    const parsedData = rows
-      .map((row) => {
-        const values = row.split(",");
-        return headers.reduce((obj, header, index) => {
-          obj[header] = index === 1 ? parseFloat(values[index]) : values[index];
-          return obj;
-        }, {});
-      })
-      .filter((row) => !isNaN(row.value));
-
+  if (!parsedData.length) {
     return {
-      parsedData
-    };
-  } catch (error) {
-    console.error('Error parsing CSV:', error);
-    return {
-      data: []
+      parsedData: [],
+      metadata
     };
   }
-} 
+
+  return {
+    parsedData,
+    metadata
+  };
+}

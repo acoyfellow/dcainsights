@@ -200,6 +200,11 @@
       <p class="text-sm text-gray-600">
         Dollar Cost Averaging During S&P 500 Market Downturns
       </p>
+      {#if data.metadata?.lastUpdated}
+        <p class="text-xs text-gray-500 mt-1">
+          Last updated {data.metadata.lastUpdated} • Source {data.metadata.source}
+        </p>
+      {/if}
     </div>
     <button
       onclick={copyShareUrl}
