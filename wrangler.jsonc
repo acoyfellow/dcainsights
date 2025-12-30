@@ -3,7 +3,28 @@
   "main": ".svelte-kit/cloudflare/_worker.js",
   "compatibility_date": "2025-07-22",
   "compatibility_flags": ["nodejs_compat"],
+  "triggers": {
+    "crons": ["0 * * * *"]
+  },
   "assets": { "directory": ".svelte-kit/cloudflare", "binding": "ASSETS" },
+  "vars": {
+    // Update this to your upstream dataset URL.
+    "UPSTREAM_URL": "https://example.com/data.json"
+  },
+  "r2_buckets": [
+    {
+      "binding": "DATASETS_BUCKET",
+      "bucket_name": "dataset-snapshots"
+    }
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "DATASET_METADATA",
+      // Replace with your KV namespace id.
+      "id": "REPLACE_WITH_KV_NAMESPACE_ID",
+      "preview_id": "REPLACE_WITH_PREVIEW_KV_NAMESPACE_ID"
+    }
+  ],
   "observability": {
     "enabled": true
   }
