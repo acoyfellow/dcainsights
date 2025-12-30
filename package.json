@@ -2,6 +2,7 @@
   "name": "dcainsights",
   "version": "0.0.1",
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250913.0",
     "@sveltejs/adapter-cloudflare": "^7.2.3",
     "@sveltejs/kit": "^2.43.4",
     "@sveltejs/vite-plugin-svelte": "^6.2.1",
