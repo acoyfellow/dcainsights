@@ -15,7 +15,7 @@ Otherwise: keep shipping.
 
 ## What to ship (priority order)
 
-1) **SEO traffic**
+1) **SEO traffic** (more keywords, more traffic, more revenue, frequent homepage updates, NEVER publish broken links)
 2) **Better tools** (more useful + faster + shareable)
 3) **Monetization** (conversion lifts, paid exports, paid reports, subscriptions)
 4) **Distribution** (X, partnerships, affiliates, sponsorships)
