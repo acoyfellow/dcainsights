@@ -46,7 +46,7 @@
       "id": "LEADS-001",
       "title": "Add email capture: 'Email me this report' (protected with Turnstile if used)",
       "priority": 4,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Report page has an email capture form",
         "Submission stores email + report id (KV/D1) OR sends email via existing provider",

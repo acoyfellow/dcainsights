@@ -71,3 +71,21 @@
 - CLOUDFLARE_ZONE_ID (new - for cache purge API calls)
 - Existing: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
 
+## 2026-01-07 - LEADS-001
+
+**What was implemented**
+- Added "Email Me This Report" button to S&P 500 DCA Calculator
+- Modal form captures email address
+- Submits to existing /api/newsletter/subscribe endpoint
+- Shows success confirmation after subscription
+- Clean, accessible modal with form validation
+
+**Files changed**
+- src/routes/sp500-dca-calculator/+page.svelte
+
+**Learnings**
+- Reuse existing newsletter API for email capture (no new backend needed)
+- Modal pattern: fixed overlay, centered content, close on backdrop click
+- Form validation: regex for email format, disable submit while submitting
+- Use existing toast notifications for feedback
+
