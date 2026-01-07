@@ -7,6 +7,8 @@
     ChevronDown,
     Download,
     Lock,
+    Mail,
+    X,
   } from "lucide-svelte";
   import DCAChart from "$lib/components/DCAChart.svelte";
   import { addToast } from "$lib/state.svelte";
@@ -141,6 +143,53 @@
     reportLoaded = loadReportFromUrl();
     return reportLoaded;
   });
+
+  // Email capture modal state
+  let showEmailModal = $state(false);
+  let emailInput = $state("");
+  let emailSubmitting = $state(false);
+  let emailSubscribed = $state(false);
+
+  async function handleEmailSubmit() {
+    if (!emailInput || emailSubmitting) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput)) {
+      addToast("Please enter a valid email address", "error");
+      return;
+    }
+
+    emailSubmitting = true;
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: emailInput,
+          tier: $isPro ? "pro" : "free"
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        emailSubscribed = true;
+        addToast(result.message || "Report will be emailed to you!");
+        setTimeout(() => {
+          showEmailModal = false;
+          emailSubscribed = false;
+          emailInput = "";
+        }, 2000);
+      } else {
+        addToast(result.message || "Subscription failed", "error");
+      }
+    } catch {
+      addToast("Failed to subscribe. Please try again.", "error");
+    } finally {
+      emailSubmitting = false;
+    }
+  }
 
   function toggleSort(column) {
     if (sortColumn === column) {
@@ -289,6 +338,14 @@
           <Lock class="w-4 h-4 text-orange-600" />
         {/if}
         <span class="text-sm {$isPro ? '' : 'text-orange-700 font-medium'}">Export CSV</span>
+      </button>
+      <button
+        onclick={() => showEmailModal = true}
+        class="border border-gray-300 h-12 px-4 hover:bg-gray-100 flex items-center gap-2"
+        title="Email me this report"
+      >
+        <Mail class="w-4 h-4" />
+        <span class="text-sm">Email Report</span>
       </button>
       <button
         onclick={copyShareUrl}
@@ -522,4 +579,77 @@
       rel="noopener noreferrer">MacroTrends S&P 500 Historical Data</a
     >
   </p>
+
+  <!-- Email Capture Modal -->
+  {#if showEmailModal}
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50">
+      <div class="bg-white rounded-xl p-6 max-w-md w-full relative">
+        <button
+          onclick={() => showEmailModal = false}
+          class="absolute top-4 right-4 text-gray-400 hover:text-gray-600"
+        >
+          <X class="w-5 h-5" />
+        </button>
+
+        <h3 class="text-xl font-bold mb-2">Email Me This Report</h3>
+        <p class="text-gray-600 mb-6">
+          Enter your email to receive this DCA analysis with all the details.
+        </p>
+
+        {#if emailSubscribed}
+          <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+            <div class="flex items-center gap-2">
+              <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+              </svg>
+              <span class="text-green-800 font-medium">You're subscribed!</span>
+            </div>
+          </div>
+        {:else}
+          <form
+            onsubmit={(e) => {
+              e.preventDefault();
+              handleEmailSubmit();
+            }}
+            class="space-y-4"
+          >
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-1">
+                Email address
+              </label>
+              <input
+                id="email"
+                type="email"
+                bind:value={emailInput}
+                placeholder="you@example.com"
+                class="w-full px-4 py-3 border border-gray-300 rounded-lg outline-none focus:ring-2 focus:ring-blue-500"
+                disabled={emailSubmitting}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={emailSubmitting || !emailInput}
+              class="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+            >
+              {#if emailSubmitting}
+                <svg class="animate-spin w-5 h-5" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                </svg>
+                Subscribing...
+              {:else}
+                <Mail class="w-5 h-5" />
+                Send Report to My Email
+              {/if}
+            </button>
+          </form>
+        {/if}
+
+        <p class="text-xs text-gray-500 mt-4">
+          We respect your privacy. Unsubscribe anytime.
+        </p>
+      </div>
+    </div>
+  {/if}
 </main>
