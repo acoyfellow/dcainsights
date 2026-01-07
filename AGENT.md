@@ -73,11 +73,45 @@ If a story needs a secret and it’s missing:
 - STRIPE_PUBLISHABLE_KEY (client ok)
 
 ### Cloudflare (deploy/ops)
-- CLOUDFLARE_API_TOKEN (required: deploy + cache purge API calls)
-  - Permissions needed: Workers & Pages:Edit, Account Settings:Read, Cache Purge:Edit
-- CLOUDFLARE_ACCOUNT_ID (required: Pages/Workers deployment)
-- CLOUDFLARE_ZONE_ID (required for cache purge in GitHub Action; get from DNS settings)
-- CLOUDFLARE_EMAIL (NOT NEEDED - only for legacy API key auth; use API token instead)
+- CLOUDFLARE_API_TOKEN (required for wrangler deploy + KV namespace creation)
+  - Permissions: Workers & Pages:Edit, Account Settings:Read, Cache Purge:Edit
+  - Get from: https://dash.cloudflare.com/profile/api-tokens
+- CLOUDFLARE_ACCOUNT_ID (required for wrangler deploy)
+  - Get from: Workers & Pages → Settings → Account ID
+- CLOUDFLARE_ZONE_ID (optional: for cache purge via Cloudflare API)
+  - Get from: DNS settings for dcainsights.com
+- CLOUDFLARE_EMAIL (NOT NEEDED - only for legacy API key auth)
+
+## Deployment (Native Cloudflare Pages)
+
+**Cloudflare Pages auto-deploys on push to main.** No GitHub Actions needed.
+
+Deployment flow:
+```
+git push origin main
+    ↓
+Cloudflare Pages detects commit
+    ↓
+Build: bun install && bun run build
+    ↓
+Deploy: npx wrangler deploy (via Pages build settings)
+    ↓
+Live at dcainsights.com
+```
+
+## KV Namespace Setup
+
+For shareable report links (MON-002):
+
+```bash
+# Run locally with your Cloudflare credentials
+bash scripts/create-kv.sh
+```
+
+This will:
+1. Create a KV namespace via Cloudflare API
+2. Update `wrangler.jsonc` with the real namespace ID
+3. Commit and push (triggering redeploy)
 
 ### Other
 - GCP_API_KEY (document usage/scope in `@CHANGELOG.md`)
