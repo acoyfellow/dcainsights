@@ -19,7 +19,7 @@
       "id": "MON-002",
       "title": "Create shareable 'Report Link' for a scenario result",
       "priority": 2,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "User can generate a shareable URL for a scenario",
         "Share URL loads the same results without recomputing inputs",
@@ -27,7 +27,7 @@
         "bun dev verification: open share URL in fresh browser session",
         "bun tsc passes"
       ],
-      "notes": "This makes virality + lead flow real."
+      "notes": "This makes virality + lead flow real. Uses Cloudflare KV for storage."
     },
     {
       "id": "OPS-001",
@@ -60,13 +60,13 @@
       "id": "DATA-001",
       "title": "Track conversion events (view tool → export click → checkout start → purchase)",
       "priority": 5,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Event logging exists for key steps",
         "Events are viewable somewhere (logs, KV counters, or analytics provider)",
         "bun tsc passes"
       ],
-      "notes": "So you know which tool to monetize harder."
+      "notes": "So you know which tool to monetize harder. Uses /api/events endpoint."
     }
   ]
 }

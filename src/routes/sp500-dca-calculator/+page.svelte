@@ -96,7 +96,7 @@
 
   async function copyShareUrl() {
     try {
-      // Create shareable report link with encoded state
+      // Create shareable report link using KV storage
       const scenario = {
         a: investmentAmount, // amount
         i: selectedInterval, // interval
@@ -104,9 +104,27 @@
         d: sortDirection || "asc", // sort direction
       };
 
-      // Encode to base64 for clean URL
-      const encoded = btoa(JSON.stringify(scenario));
-      const url = `${page.url.origin}${page.url.pathname}?report=${encoded}`;
+      // Generate a unique ID for the report
+      const reportId = crypto.randomUUID();
+
+      // Save to KV storage
+      const response = await fetch("/api/reports", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          id: reportId,
+          data: scenario,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to save report");
+      }
+
+      const result = await response.json();
+      
+      // Use the report ID for the shareable URL
+      const url = `${page.url.origin}${page.url.pathname}?report=${result.id}`;
 
       if (typeof navigator !== "undefined") {
         await navigator.clipboard.writeText(url);
@@ -118,20 +136,32 @@
     }
   }
 
-  // Load report from URL parameter
-  function loadReportFromUrl() {
-    const reportParam = page.url.searchParams.get("report");
-    if (!reportParam) return false;
+  // Load report from KV storage using URL parameter
+  async function loadReportFromUrl() {
+    const reportId = page.url.searchParams.get("report");
+    if (!reportId) return false;
 
     try {
-      const scenario = JSON.parse(atob(reportParam));
+      const response = await fetch(`/api/reports?id=${reportId}`);
+      
+      if (!response.ok) {
+        if (response.status === 404) {
+          console.error("Report not found");
+          return false;
+        }
+        throw new Error("Failed to load report");
+      }
+
+      const result = await response.json();
+      const scenario = result.data;
+
       investmentAmount = scenario.a || 100;
       selectedInterval = (scenario.i as Interval) || "monthly";
       sortColumn = scenario.s || "";
       sortDirection = scenario.d || "asc";
       return true;
     } catch {
-      console.error("Failed to parse report parameter");
+      console.error("Failed to load report");
       return false;
     }
   }
@@ -250,11 +280,36 @@
     };
   }
 
+  // Track conversion events
+  async function trackEvent(type: string, data?: Record<string, unknown>) {
+    try {
+      await fetch("/api/events", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type,
+          tool: "sp500-dca-calculator",
+          metadata: data,
+        }),
+      });
+    } catch (e) {
+      console.error("Failed to track event:", e);
+    }
+  }
+
+  // Track page view on mount
+  $effect(() => {
+    trackEvent("view_tool", { path: page.url.pathname });
+  });
+
   function exportToCSV() {
     if (!$isPro) {
+      trackEvent("checkout_start", { reason: "export_click_free", upgradeTo: "pro" });
       window.location.href = "/pricing?upgrade=export";
       return;
     }
+
+    trackEvent("export_click", { tier: "pro" });
 
     const headers = ["Date", "Price", "Total Invested", "Shares Bought", "Total Shares", "Avg Cost/Share"];
     const rows = tableData.map((row) => [
