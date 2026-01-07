@@ -36,8 +36,6 @@ jobs:
           projectName: dcainsights
           directory: .svelte-kit/cloudflare
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          # Wait for deployment to complete
-          wait: true
 
   purge-cache:
     needs: deploy
@@ -47,13 +45,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Purge Cache
-        uses: cloudflare/pages-action@v1
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: dcainsights
-          # Pages action doesn't expose purge directly, using API call instead
       - name: Purge cache via API
         if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
         run: |
