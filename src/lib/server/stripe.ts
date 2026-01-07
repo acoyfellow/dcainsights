@@ -20,15 +20,16 @@ export const isTestMode = !process.env.STRIPE_SECRET_KEY && !!process.env.STRIPE
 export const SUBSCRIPTION_PLANS = {
   pro: {
     name: 'Pro',
-    priceMonthly: 999,
-    priceYearly: 9900,
-    priceIdMonthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_pro_monthly',
-    priceIdYearly: process.env.STRIPE_PRO_YEARLY_PRICE_ID || 'price_pro_yearly',
+    priceMonthly: 2900,
+    priceYearly: 29700,
+    priceIdMonthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_1Sn1ByF1oOQhJ3pzlxhPiKBy',
+    priceIdYearly: process.env.STRIPE_PRO_YEARLY_PRICE_ID || 'price_1Sn1BWF1oOQhJ3pzmrGJ0F05',
     features: [
       'Advanced analytics dashboard',
       'Custom portfolio tracking',
       'Export functionality (PDF, CSV)',
       'DCA vs Lump Sum comparison tools',
+      'Shareable report links',
       'Priority processing',
       'Ad-free experience',
       'Email support'
@@ -36,10 +37,10 @@ export const SUBSCRIPTION_PLANS = {
   },
   premium: {
     name: 'Premium',
-    priceMonthly: 2999,
-    priceYearly: 29900,
-    priceIdMonthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || 'price_premium_monthly',
-    priceIdYearly: process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID || 'price_premium_yearly',
+    priceMonthly: 5900,
+    priceYearly: 59700,
+    priceIdMonthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || 'price_1Sn1BzF1oOQhJ3pznyW9RQbf',
+    priceIdYearly: process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID || 'price_1Sn1BlF1oOQhJ3pz9j3iOl22',
     features: [
       'All Pro features',
       'Custom market scenarios',

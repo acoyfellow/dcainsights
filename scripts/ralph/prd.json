@@ -5,14 +5,14 @@
       "id": "REV-001",
       "title": "Create Stripe Products for DCA Insights (Pro $297/yr, Premium $597/yr)",
       "priority": 1,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Stripe products created for Pro tier ($297/year)",
         "Stripe products created for Premium tier ($597/year)",
         "Products visible in Stripe Dashboard",
         "Price IDs match config"
       ],
-      "notes": "Current MRR: $0. Target: $1M/month. Need ~3,400 subscribers at $297/mo or ~10,000 at $99/mo"
+      "notes": "Products created: prod_TkWD66mcwJ2Cn3 (Pro), prod_TkWEGooet1Sab0 (Premium). Prices: price_1Sn1BWF1oOQhJ3pzmrGJ0F05 ($297/yr), price_1Sn1BlF1oOQhJ3pz9j3iOl22 ($597/yr). Current MRR: $0. Target: $1M/month. Need ~3,400 subscribers at $297/mo or ~10,000 at $99/mo"
     },
     {
       "id": "REV-002",  

@@ -53,6 +53,7 @@ Persistent memory is ONLY:
 
 ### 7) Production Stripe Always On
 
+### 8) You can push directly to `main` branch for quick updates, but always verify the build is working first, and the deploy has succeeded.
 ---
 
 ## ENV / SECRETS (SOURCE OF TRUTH)
