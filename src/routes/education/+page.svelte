@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Lock, Play, FileText, Download, ChevronRight, Check } from 'lucide-svelte';
+  import { Lock, Play, FileText, Download, ChevronRight, Check, AlertCircle } from 'lucide-svelte';
   import { isPremium, userTier } from '$lib/stores/user';
   
   const courses = [
@@ -74,6 +74,10 @@
     if (courseTier === 'pro' && (tier === 'pro' || tier === 'premium')) return true;
     if (courseTier === 'premium' && tier === 'premium') return true;
     return false;
+  }
+
+  function startCourse(course: typeof courses[0]) {
+    alert(`Starting "${course.title}"...\n\nCourse content would load here. This is a placeholder for the actual course video player.`);
   }
 </script>
 
@@ -219,12 +223,15 @@
               <Download class="w-4 h-4" />
               Download
             </a>
-          {:else if canAccess(course.tier)}
-            <span class="text-lg font-bold text-gray-400">Included</span>
-            <button class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors">
-              <Play class="w-4 h-4" />
-              Start Course
-            </button>
+           {:else if canAccess(course.tier)}
+             <span class="text-lg font-bold text-gray-400">Included</span>
+             <button
+               onclick={() => startCourse(course)}
+               class="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
+             >
+               <Play class="w-4 h-4" />
+               Start Course
+             </button>
           {:else}
             <span class="text-lg font-bold">${course.price}</span>
             <a 

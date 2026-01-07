@@ -124,6 +124,48 @@
     { value: "10K+", label: "Investors" },
     { value: "Free", label: "To Start" }
   ];
+
+  // Newsletter subscription state
+  let emailInput = $state("");
+  let emailSubmitting = $state(false);
+  let emailSubscribed = $state(false);
+
+  async function handleNewsletterSubmit(e: Event) {
+    e.preventDefault();
+    if (!emailInput || emailSubmitting) return;
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(emailInput)) {
+      alert("Please enter a valid email address");
+      return;
+    }
+
+    emailSubmitting = true;
+
+    try {
+      const response = await fetch("/api/newsletter/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: emailInput, tier: "free" }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        emailSubscribed = true;
+        emailInput = "";
+        setTimeout(() => {
+          emailSubscribed = false;
+        }, 3000);
+      } else {
+        alert(result.message || "Subscription failed");
+      }
+    } catch {
+      alert("Failed to subscribe. Please try again.");
+    } finally {
+      emailSubmitting = false;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -603,19 +645,28 @@
         straight to your inbox. No spam, unsubscribe anytime.
       </p>
 
-      <form class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+      <form onsubmit={handleNewsletterSubmit} class="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
         <input
           type="email"
+          bind:value={emailInput}
           placeholder="Enter your email"
           class="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          disabled={emailSubmitting}
         />
         <button
           type="submit"
-          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors whitespace-nowrap"
+          disabled={emailSubmitting}
+          class="px-6 py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors whitespace-nowrap disabled:opacity-50"
         >
-          Subscribe
+          {emailSubmitting ? 'Subscribing...' : 'Subscribe'}
         </button>
       </form>
+
+      {#if emailSubscribed}
+        <p class="text-sm text-green-600 mt-4 font-medium">
+          ✓ You're subscribed! Check your inbox for confirmation.
+        </p>
+      {/if}
 
       <p class="text-sm text-slate-500 mt-4">
         Join 10,000+ investors receiving our newsletter
