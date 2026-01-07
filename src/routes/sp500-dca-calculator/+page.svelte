@@ -5,9 +5,12 @@
     ArrowDownWideNarrow,
     Share,
     ChevronDown,
+    Download,
+    Lock,
   } from "lucide-svelte";
   import DCAChart from "$lib/components/DCAChart.svelte";
   import { addToast } from "$lib/state.svelte";
+  import { isPro } from "$lib/stores/user";
   import { startOfMonth, startOfWeek, startOfYear } from "date-fns";
 
   let { data } = $props();
@@ -163,6 +166,38 @@
         Number(lastEntry.value),
     };
   }
+
+  function exportToCSV() {
+    if (!$isPro) {
+      window.location.href = "/pricing?upgrade=export";
+      return;
+    }
+
+    const headers = ["Date", "Price", "Total Invested", "Shares Bought", "Total Shares", "Avg Cost/Share"];
+    const rows = tableData.map((row) => [
+      row.date,
+      row.value,
+      row.invested,
+      row.shares,
+      row.totalShares,
+      row.avgCost,
+    ]);
+
+    const csvContent = [headers, ...rows]
+      .map((row) => row.map((cell) => `"${cell}"`).join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `dca-results-${new Date().toISOString().split("T")[0]}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    addToast("CSV downloaded successfully!");
+  }
 </script>
 
 <svelte:head>
@@ -186,13 +221,27 @@
         </p>
       {/if}
     </div>
-    <button
-      onclick={copyShareUrl}
-      class="border border-gray-300 h-12 px-4 hover:bg-gray-100 flex items-center gap-2"
-    >
-      <span class="text-sm">Share</span>
-      <Share class="w-4 h-4" />
-    </button>
+    <div class="flex items-center gap-2">
+      <button
+        onclick={exportToCSV}
+        class="border {$isPro ? 'border-gray-300 hover:bg-gray-100' : 'border-orange-300 bg-orange-50 hover:bg-orange-100'} h-12 px-4 flex items-center gap-2 transition-colors"
+        title={$isPro ? "Export results to CSV" : "Upgrade to Pro to export"}
+      >
+        {#if $isPro}
+          <Download class="w-4 h-4" />
+        {:else}
+          <Lock class="w-4 h-4 text-orange-600" />
+        {/if}
+        <span class="text-sm {$isPro ? '' : 'text-orange-700 font-medium'}">Export CSV</span>
+      </button>
+      <button
+        onclick={copyShareUrl}
+        class="border border-gray-300 h-12 px-4 hover:bg-gray-100 flex items-center gap-2"
+      >
+        <span class="text-sm">Share</span>
+        <Share class="w-4 h-4" />
+      </button>
+    </div>
   </div>
   <p class="text-base md:text-lg mb-8 text-gray-600 leading-relaxed font-light">
     Dollar Cost Averaging (DCA) is an investment strategy where you invest a
