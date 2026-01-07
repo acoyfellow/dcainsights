@@ -1,9 +1,10 @@
 import Stripe from 'stripe';
 
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+// Use test key if available (development mode), otherwise use live key
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_TEST_SECRET_KEY || '';
 
 if (!stripeSecretKey) {
-  console.warn('STRIPE_SECRET_KEY is not set. Stripe functionality will be disabled.');
+  console.warn('Stripe keys not set. Stripe functionality will be disabled.');
 }
 
 export const stripe = stripeSecretKey 
@@ -12,6 +13,9 @@ export const stripe = stripeSecretKey
       typescript: true,
     })
   : null;
+
+// Check if we're using test mode
+export const isTestMode = !process.env.STRIPE_SECRET_KEY && !!process.env.STRIPE_TEST_SECRET_KEY;
 
 export const SUBSCRIPTION_PLANS = {
   pro: {

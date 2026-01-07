@@ -14,7 +14,8 @@
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "uplot": "^1.6.32",
-    "vite": "^7.1.7"
+    "vite": "^7.1.7",
+    "wrangler": "^4.57.0"
   },
   "private": true,
   "scripts": {
@@ -25,5 +26,8 @@
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch"
   },
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "stripe": "^20.1.1"
+  }
 }
