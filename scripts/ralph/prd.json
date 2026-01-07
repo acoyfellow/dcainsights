@@ -19,7 +19,7 @@
       "id": "MON-002",
       "title": "Create shareable 'Report Link' for a scenario result",
       "priority": 2,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
         "User can generate a shareable URL for a scenario",
         "Share URL loads the same results without recomputing inputs",
@@ -33,7 +33,7 @@
       "id": "OPS-001",
       "title": "CI: purge Cloudflare cache on deploy for sitemap + key pages",
       "priority": 3,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
         "GitHub Action runs after deploy and purges cache for /, /sitemap.xml, and tool routes",
         "Uses CLOUDFLARE_API_TOKEN + CLOUDFLARE_ACCOUNT_ID",
@@ -46,7 +46,7 @@
       "id": "LEADS-001",
       "title": "Add email capture: 'Email me this report' (protected with Turnstile if used)",
       "priority": 4,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
         "Report page has an email capture form",
         "Submission stores email + report id (KV/D1) OR sends email via existing provider",
@@ -60,7 +60,7 @@
       "id": "DATA-001",
       "title": "Track conversion events (view tool → export click → checkout start → purchase)",
       "priority": 5,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
         "Event logging exists for key steps",
         "Events are viewable somewhere (logs, KV counters, or analytics provider)",
