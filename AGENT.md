@@ -76,6 +76,7 @@ If a story needs a secret and it’s missing:
 - CLOUDFLARE_API_TOKEN (server/CI only)
 - CLOUDFLARE_EMAIL (server/CI only; only if tooling requires it)
 - CLOUDFLARE_ACCOUNT_ID (server/CI only)
+- CLOUDFLARE_ZONE_ID (required for cache purge in GitHub Action)
 
 ### Other
 - GCP_API_KEY (document usage/scope in `@CHANGELOG.md`)

@@ -46,3 +46,28 @@
 - PRD requires "Storage uses KV or R2" - need to add Cloudflare KV binding
 - Would need to update wrangler.jsonc with KV namespace
 - For now, using URL-encoded state as lightweight alternative
+
+## 2026-01-07 - OPS-001
+
+**What was implemented**
+- Created GitHub Action workflow for deploy + cache purge
+- Workflow runs on push to main
+- Deploys to Cloudflare Pages using cloudflare/pages-action
+- After deploy, purges cache for key pages (/, /sitemap.xml, all tool routes)
+- Fails loudly if CLOUDFLARE_API_TOKEN or CLOUDFLARE_ZONE_ID missing
+
+**Files changed**
+- .github/workflows/deploy.yml (new file)
+- AGENT.md (added CLOUDFLARE_ZONE_ID to secrets)
+- scripts/ralph/prd.json (marked OPS-001 complete)
+
+**Learnings**
+- Cloudflare cache purge requires CLOUDFLARE_ZONE_ID (not just ACCOUNT_ID)
+- Use Cloudflare API v4: POST /zones/:zone_id/purge_cache
+- GitHub Actions secrets: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ZONE_ID
+- Workflow needs to fail explicitly if env vars missing
+
+**Required secrets to add in GitHub**
+- CLOUDFLARE_ZONE_ID (new - for cache purge API calls)
+- Existing: CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID
+
