@@ -1,72 +1,70 @@
 {
-  "branchName": "ralph/feature",
+  "branchName": "ralph/monetization",
   "userStories": [
     {
-      "id": "MON-001",
-      "title": "Add Pro gate for Export CSV on one tool (Stripe already wired)",
+      "id": "REV-001",
+      "title": "Create Stripe Products for DCA Insights (Pro $297/yr, Premium $597/yr)",
       "priority": 1,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
-        "Export CSV button exists on one tool page",
-        "If not Pro, clicking Export routes to existing Stripe flow",
-        "If Pro, CSV downloads correctly",
-        "No secret keys in client bundle",
-        "bun tsc passes"
+        "Stripe products created for Pro tier ($297/year)",
+        "Stripe products created for Premium tier ($597/year)",
+        "Products visible in Stripe Dashboard",
+        "Price IDs match config"
       ],
-      "notes": "Fastest $: paywall a high-intent output."
+      "notes": "Current MRR: $0. Target: $1M/month. Need ~3,400 subscribers at $297/mo or ~10,000 at $99/mo"
     },
     {
-      "id": "MON-002",
-      "title": "Create shareable 'Report Link' for a scenario result",
+      "id": "REV-002",  
+      "title": "Wire Stripe Products to Pricing Page",
       "priority": 2,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
-        "User can generate a shareable URL for a scenario",
-        "Share URL loads the same results without recomputing inputs",
-        "Storage uses KV or R2 (document which in @CHANGELOG.md)",
-        "bun dev verification: open share URL in fresh browser session",
+        "Pricing page shows DCA Insights products",
+        "Checkout creates subscriptions correctly",
+        "Webhooks update user tier on payment",
         "bun tsc passes"
       ],
-      "notes": "This makes virality + lead flow real. Uses Cloudflare KV for storage."
+      "notes": "Existing code structure exists - just need to point to new products"
     },
     {
-      "id": "OPS-001",
-      "title": "CI: purge Cloudflare cache on deploy for sitemap + key pages",
+      "id": "REV-003",
+      "title": "Add User Tier Enforcement to Protected Features",
       "priority": 3,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
-        "GitHub Action runs after deploy and purges cache for /, /sitemap.xml, and tool routes",
-        "Uses CLOUDFLARE_API_TOKEN + CLOUDFLARE_ZONE_ID",
-        "Fails loudly if env vars missing",
-        "bun tsc passes"
+        "CSV export checks Pro tier",
+        "Share links check Pro tier",
+        "Premium courses check Premium tier",
+        "bun dev verification works"
       ],
-      "notes": "Speeds SEO iteration; prevents stale content."
+      "notes": "Already partially implemented - just needs correct product IDs"
     },
     {
-      "id": "LEADS-001",
-      "title": "Add email capture: 'Email me this report' (protected with Turnstile if used)",
+      "id": "REV-004",
+      "title": "Implement Conversion Tracking Dashboard",
       "priority": 4,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
-        "Report page has an email capture form",
-        "Submission stores email + report id (KV/D1) OR sends email via existing provider",
-        "If Turnstile is added: server verifies token",
-        "bun dev verification: submit works end-to-end",
+        "Track: view → signup → checkout → purchase",
+        "Dashboard shows MRR growth",
+        "Identify conversion bottlenecks",
         "bun tsc passes"
       ],
-      "notes": "Even without ads, this turns traffic into a list."
+      "notes": "DATA-001 events API exists - need analytics UI"
     },
     {
-      "id": "DATA-001",
-      "title": "Track conversion events (view tool → export click → checkout start → purchase)",
+      "id": "REV-005",
+      "title": "Launch Campaign to First 100 Paid Subscribers",
       "priority": 5,
-      "passes": true,
+      "passes": false,
       "acceptanceCriteria": [
-        "Event logging exists for key steps",
-        "Events are viewable somewhere (logs, KV counters, or analytics provider)",
-        "bun tsc passes"
+        "Email list outreach (LEADS-001)",
+        "Social media launch",
+        "First 100 subscribers acquired",
+        "MRR > $8,000/month"
       ],
-      "notes": "So you know which tool to monetize harder. Uses /api/events endpoint."
+      "notes": "Growth milestone: $8K MRR = 27 subscribers at $297/mo"
     }
   ]
 }
