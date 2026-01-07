@@ -10,7 +10,6 @@
     "lucide-svelte": "^0.544.0",
     "svelte": "^5.39.6",
     "svelte-check": "^4.3.2",
-    "svelte-tiny-virtual-list": "^3.0.1",
     "tailwindcss": "^4.1.13",
     "typescript": "^5.9.2",
     "uplot": "^1.6.32",

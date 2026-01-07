@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SUBSCRIPTION_PLANS, type SubscriptionTier } from '$lib/server/stripe';
+  import { SUBSCRIPTION_PLANS, type SubscriptionTier } from '$lib/types';
   import { Check, Loader2 } from 'lucide-svelte';
   
   let { 

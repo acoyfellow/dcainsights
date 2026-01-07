@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import VirtualList from "svelte-tiny-virtual-list";
   import {
     ArrowUpNarrowWide,
     ArrowDownWideNarrow,
@@ -324,16 +323,12 @@
     />
   </div>
 
-  <div class="overflow-x-auto border border-gray-300">
-    <VirtualList
-      width="100%"
-      height={400}
-      itemCount={sortedTableData.length}
-      itemSize={33}
-    >
-      <div slot="header" class="sticky top-0 bg-white z-10">
+  <div class="overflow-x-auto border border-gray-300 max-h-[500px] overflow-y-auto">
+    <div class="min-w-[700px]">
+      <!-- Sticky Header -->
+      <div class="sticky top-0 bg-white z-10">
         <div
-          class="grid grid-cols-6 divide-x divide-gray-300 border-collapse min-w-[700px] border-b border-gray-300"
+          class="grid grid-cols-6 divide-x divide-gray-300 border-collapse border-b border-gray-300"
         >
           {#each columns as column}
             <button
@@ -360,16 +355,17 @@
         </div>
       </div>
 
-      {#snippet item({ index, style })}
-        <div {style} class="border-b border-gray-300 min-w-[700px]">
+      <!-- Table Body -->
+      {#each sortedTableData as row, index (index)}
+        <div class="border-b border-gray-300 min-w-[700px]">
           <div
             class="grid grid-cols-6 border-gray-300 font-light text-xs divide-x divide-gray-300 border-collapse"
           >
             <div class="p-2 whitespace-nowrap">
-              {sortedTableData[index].date}
+              {row.date}
             </div>
             <div class="p-2">
-              {Number(sortedTableData[index].value).toLocaleString("en-US", {
+              {Number(row.value).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
                 minimumFractionDigits: 2,
@@ -377,7 +373,7 @@
               })}
             </div>
             <div class="p-2">
-              {Number(sortedTableData[index].invested).toLocaleString("en-US", {
+              {Number(row.invested).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
                 minimumFractionDigits: 0,
@@ -385,13 +381,13 @@
               })}
             </div>
             <div class="p-2">
-              {Number(sortedTableData[index].shares).toLocaleString("en-US", {
+              {Number(row.shares).toLocaleString("en-US", {
                 minimumFractionDigits: 4,
                 maximumFractionDigits: 4,
               })}
             </div>
             <div class="p-2">
-              {Number(sortedTableData[index].totalShares).toLocaleString(
+              {Number(row.totalShares).toLocaleString(
                 "en-US",
                 {
                   minimumFractionDigits: 4,
@@ -400,7 +396,7 @@
               )}
             </div>
             <div class="p-2">
-              {Number(sortedTableData[index].avgCost).toLocaleString("en-US", {
+              {Number(row.avgCost).toLocaleString("en-US", {
                 style: "currency",
                 currency: "USD",
                 minimumFractionDigits: 2,
@@ -409,8 +405,8 @@
             </div>
           </div>
         </div>
-      {/snippet}
-    </VirtualList>
+      {/each}
+    </div>
   </div>
   <p class="text-xs text-gray-600 my-8">
     Data source:

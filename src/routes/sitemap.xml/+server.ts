@@ -37,6 +37,78 @@ const routes = [
     changeFreq: 'monthly',
     priority: '0.9',
     description: 'DCA During Recessions - Economic Downturn Analysis'
+  },
+  {
+    url: '/blog',
+    changeFreq: 'weekly',
+    priority: '0.8',
+    description: 'DCA Insights Blog - Investment Strategies and Analysis'
+  },
+  {
+    url: '/blog/ultimate-guide-to-dollar-cost-averaging',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'The Ultimate Guide to Dollar Cost Averaging in 2026'
+  },
+  {
+    url: '/blog/dca-vs-lump-sum-which-wins',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'DCA vs Lump Sum: Which Investment Strategy Wins?'
+  },
+  {
+    url: '/blog/bear-market-survival-guide',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'Bear Market Survival Guide - DCA Strategy for Down Markets'
+  },
+  {
+    url: '/blog/best-days-to-invest',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'Best Days to Invest: Does Timing Really Matter?'
+  },
+  {
+    url: '/blog/dca-crypto-vs-stocks',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'DCA Crypto vs Stocks: Which Returns More?'
+  },
+  {
+    url: '/about',
+    changeFreq: 'monthly',
+    priority: '0.6',
+    description: 'About DCA Insights - Our Mission'
+  },
+  {
+    url: '/pricing',
+    changeFreq: 'monthly',
+    priority: '0.6',
+    description: 'DCA Insights Pricing - Subscription Plans'
+  },
+  {
+    url: '/education',
+    changeFreq: 'monthly',
+    priority: '0.6',
+    description: 'DCA Investment Education - Courses and Resources'
+  },
+  {
+    url: '/newsletter',
+    changeFreq: 'monthly',
+    priority: '0.5',
+    description: 'DCA Insights Newsletter - Investment Insights'
+  },
+  {
+    url: '/affiliate',
+    changeFreq: 'monthly',
+    priority: '0.5',
+    description: 'DCA Insights Affiliate Program - Partner with Us'
+  },
+  {
+    url: '/link',
+    changeFreq: 'monthly',
+    priority: '0.5',
+    description: 'DCA Insights - Quick Links'
   }
 ];
 

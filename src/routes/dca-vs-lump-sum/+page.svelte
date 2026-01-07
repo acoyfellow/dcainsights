@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import VirtualList from "svelte-tiny-virtual-list";
   import {
     ArrowUpNarrowWide,
     ArrowDownWideNarrow,

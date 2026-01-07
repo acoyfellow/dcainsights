@@ -1,17 +1,4 @@
-import { db, generateUserId } from './database';
-
-// Affiliate partner types
-export type AffiliatePartner = {
-  id: string;
-  name: string;
-  description: string;
-  url: string;
-  commission: number; // percentage
-  category: 'brokerage' | 'tool' | 'content' | 'financial';
-  affiliateCode?: string;
-  status: 'active' | 'inactive';
-  createdAt: number;
-};
+import { affiliatePartnersData, type AffiliatePartner } from '$lib/types';
 
 // Affiliate click tracking
 interface AffiliateClick {
@@ -33,60 +20,6 @@ interface AffiliateCommission {
   paidAt?: number;
 }
 
-// Mock data for affiliate partners
-const affiliatePartners: Map<string, AffiliatePartner> = new Map([
-  ['robinhood', {
-    id: 'robinhood',
-    name: 'Robinhood',
-    description: 'Commission-free stock, ETF, and cryptocurrency trading',
-    url: 'https://www.robinhood.com/',
-    commission: 2.5,
-    category: 'brokerage',
-    status: 'active',
-    createdAt: Date.now()
-  }],
-  ['fidelity', {
-    id: 'fidelity',
-    name: 'Fidelity Investments',
-    description: 'Full-service brokerage with zero-commission online stock trading',
-    url: 'https://www.fidelity.com/',
-    commission: 3.0,
-    category: 'brokerage',
-    status: 'active',
-    createdAt: Date.now()
-  }],
-  ['schwab', {
-    id: 'schwab',
-    name: 'Charles Schwab',
-    description: 'One of the largest brokerage firms with extensive resources',
-    url: 'https://www.schwab.com/',
-    commission: 3.0,
-    category: 'brokerage',
-    status: 'active',
-    createdAt: Date.now()
-  }],
-  ['acorns', {
-    id: 'acorns',
-    name: 'Acorns',
-    description: 'Micro-investing app that rounds up purchases to invest',
-    url: 'https://www.acorns.com/',
-    commission: 5.0,
-    category: 'tool',
-    status: 'active',
-    createdAt: Date.now()
-  }],
-  ['personal-capital', {
-    id: 'personal-capital',
-    name: 'Personal Capital',
-    description: 'Free financial tools and advisory services',
-    url: 'https://www.personalcapital.com/',
-    commission: 4.0,
-    category: 'tool',
-    status: 'active',
-    createdAt: Date.now()
-  }]
-]);
-
 // Commission storage
 const commissions: Map<string, AffiliateCommission> = new Map();
 
@@ -95,12 +28,12 @@ const clicks: AffiliateClick[] = [];
 
 // Generate affiliate link
 export function generateAffiliateLink(partnerId: string, userId?: string, source: string = 'dca-insights'): string {
-  const partner = affiliatePartners.get(partnerId);
+  const partner = affiliatePartnersData.find(p => p.id === partnerId);
   if (!partner) return '';
-  
+
   const baseUrl = partner.url;
-  const affiliateCode = partner.affiliateCode || `dcainsights-${userId || 'ref'}`;
-  
+  const affiliateCode = `dcainsights-${userId || 'ref'}`;
+
   // Check if URL already has query parameters
   const separator = baseUrl.includes('?') ? '&' : '?';
   return `${baseUrl}${separator}ref=${affiliateCode}&source=${source}`;
@@ -119,7 +52,7 @@ export function trackAffiliateClick(partnerId: string, userId?: string, source: 
 
 // Record commission
 export function recordCommission(partnerId: string, userId: string, amount: number): string {
-  const commissionId = `comm_${generateUserId()}`;
+  const commissionId = `comm_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
   const commission: AffiliateCommission = {
     id: commissionId,
     partnerId,
@@ -128,19 +61,19 @@ export function recordCommission(partnerId: string, userId: string, amount: numb
     status: 'pending',
     createdAt: Date.now()
   };
-  
+
   commissions.set(commissionId, commission);
   return commissionId;
 }
 
 // Get all affiliate partners
 export function getAffiliatePartners(): AffiliatePartner[] {
-  return Array.from(affiliatePartners.values()).filter(p => p.status === 'active');
+  return affiliatePartnersData.filter(p => p.status === 'active');
 }
 
 // Get partner by ID
 export function getAffiliatePartner(id: string): AffiliatePartner | null {
-  return affiliatePartners.get(id) || null;
+  return affiliatePartnersData.find(p => p.id === id) || null;
 }
 
 // Get user's affiliate earnings
@@ -154,7 +87,7 @@ export function getUserAffiliateEarnings(userId: string): {
   let pending = 0;
   let approved = 0;
   let paid = 0;
-  
+
   for (const commission of commissions.values()) {
     if (commission.userId === userId) {
       totalEarned += commission.amount;
@@ -171,7 +104,7 @@ export function getUserAffiliateEarnings(userId: string): {
       }
     }
   }
-  
+
   return { totalEarned, pending, approved, paid };
 }
 
@@ -186,7 +119,7 @@ export function getUserCommissionHistory(userId: string): AffiliateCommission[] 
 export function getConversionRate(partnerId: string): number {
   const partnerClicks = clicks.filter(c => c.partnerId === partnerId);
   if (partnerClicks.length === 0) return 0;
-  
+
   const converted = partnerClicks.filter(c => c.converted).length;
   return (converted / partnerClicks.length) * 100;
 }
@@ -198,9 +131,9 @@ export function markAsConverted(partnerId: string, userId: string, amount: numbe
   if (click) {
     click.converted = true;
   }
-  
+
   // Record commission
-  const partner = affiliatePartners.get(partnerId);
+  const partner = affiliatePartnersData.find(p => p.id === partnerId);
   if (partner) {
     const commissionAmount = (amount * partner.commission) / 100;
     recordCommission(partnerId, userId, commissionAmount);
@@ -243,8 +176,8 @@ export function getAffiliateStats(): {
   const totalConversions = clicks.filter(c => c.converted).length;
   const totalCommissions = Array.from(commissions.values())
     .reduce((sum, c) => sum + c.amount, 0);
-  
-  const topPartners = Array.from(affiliatePartners.values())
+
+  const topPartners = affiliatePartnersData
     .map(partner => {
       const partnerClicks = clicks.filter(c => c.partnerId === partner.id);
       const partnerConversions = partnerClicks.filter(c => c.converted).length;
@@ -255,7 +188,7 @@ export function getAffiliateStats(): {
       };
     })
     .sort((a, b) => b.clicks - a.clicks);
-  
+
   return {
     totalClicks,
     totalConversions,

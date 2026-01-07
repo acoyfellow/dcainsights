@@ -12,6 +12,8 @@
 - **About Page** - Company story and value proposition
 - **SEO Pages** - `/sitemap.xml` and `/robots.txt` optimized for indexing
 - **Social Sharing** - Twitter cards, OG images, share buttons on all pages
+- **"Best Days to Invest" Blog Post** - Analysis of day-of-week, week-of-month, and month-of-year timing patterns
+- **"DCA Crypto vs Stocks" Blog Post** - Comprehensive comparison of cryptocurrency vs S&P 500 DCA strategies
 
 ### Changed
 - Updated all pages with enhanced meta descriptions and OpenGraph tags
@@ -20,6 +22,8 @@
 ### Fixed
 - Stripe integration with test/live mode switching
 - Dev server configuration for Cloudflare deployment
+- Dependency conflict: Removed svelte-tiny-virtual-list (Svelte 4 only) in favor of native CSS scrolling
+- Server-only import errors: Refactored affiliate and subscription types to shared $lib/types.ts
 
 ---
 
