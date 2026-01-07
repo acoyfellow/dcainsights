@@ -94,19 +94,53 @@
 
   async function copyShareUrl() {
     try {
-      const url = `${page.url.origin}${page.url.pathname}?amount=${investmentAmount}&interval=${selectedInterval}${
-        sortColumn ? `&sort=${sortColumn}` : ""
-      }${sortDirection ? `&dir=${sortDirection}` : ""}`;
-      console.log({ url });
+      // Create shareable report link with encoded state
+      const scenario = {
+        a: investmentAmount, // amount
+        i: selectedInterval, // interval
+        s: sortColumn || "", // sort column
+        d: sortDirection || "asc", // sort direction
+      };
+
+      // Encode to base64 for clean URL
+      const encoded = btoa(JSON.stringify(scenario));
+      const url = `${page.url.origin}${page.url.pathname}?report=${encoded}`;
+
       if (typeof navigator !== "undefined") {
         await navigator.clipboard.writeText(url);
-        addToast("URL copied to clipboard!");
+        addToast("Report link copied!");
       }
     } catch (error) {
       console.error("Failed to copy URL:", error);
-      addToast("Failed to copy URL to clipboard", "error");
+      addToast("Failed to copy link", "error");
     }
   }
+
+  // Load report from URL parameter
+  function loadReportFromUrl() {
+    const reportParam = page.url.searchParams.get("report");
+    if (!reportParam) return false;
+
+    try {
+      const scenario = JSON.parse(atob(reportParam));
+      investmentAmount = scenario.a || 100;
+      selectedInterval = (scenario.i as Interval) || "monthly";
+      sortColumn = scenario.s || "";
+      sortDirection = scenario.d || "asc";
+      return true;
+    } catch {
+      console.error("Failed to parse report parameter");
+      return false;
+    }
+  }
+
+  let reportLoaded = $state(false);
+  let reportLoadedMessage = $derived.by(() => {
+    if (!page.url.searchParams.get("report")) return false;
+    if (reportLoaded) return true;
+    reportLoaded = loadReportFromUrl();
+    return reportLoaded;
+  });
 
   function toggleSort(column) {
     if (sortColumn === column) {
@@ -208,6 +242,28 @@
   />
   <meta property="og:url" content={page.url.host + page.url.pathname} />
 </svelte:head>
+
+{#if reportLoadedMessage}
+  <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+      </div>
+      <div>
+        <p class="font-medium text-green-800">Report loaded from shared link</p>
+        <p class="text-sm text-green-600">Scenario parameters have been applied</p>
+      </div>
+    </div>
+    <a
+      href={page.url.pathname}
+      class="text-sm text-green-700 hover:text-green-800 font-medium"
+    >
+      Clear & start fresh
+    </a>
+  </div>
+{/if}
 
 <main class="p-4 md:p-8 max-w-4xl mx-auto">
   <div class="flex items-center justify-between pb-3">
