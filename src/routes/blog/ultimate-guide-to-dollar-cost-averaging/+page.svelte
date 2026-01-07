@@ -1,6 +1,7 @@
 <script lang="ts">
-  import { Calendar, Clock, Share2, ArrowLeft } from 'lucide-svelte';
+  import { Calendar, Clock, Share2, ArrowLeft, ArrowRight } from 'lucide-svelte';
   import { page } from '$app/state';
+  import ShareButtons from '$lib/components/ShareButtons.svelte';
   
   const post = {
     title: 'The Ultimate Guide to Dollar Cost Averaging in 2026',

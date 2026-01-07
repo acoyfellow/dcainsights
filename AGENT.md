@@ -15,7 +15,7 @@ Otherwise: keep shipping.
 
 ## What to ship (priority order)
 
-1) **SEO traffic** (more keywords, more traffic, more revenue, frequent homepage updates, NEVER publish broken links)
+1) **SEO traffic** (more keywords, more traffic, more revenue, frequent homepage updates, NEVER publish broken links, always update the blog, always update the sitemap, rss feed, etc.)
 2) **Better tools** (more useful + faster + shareable)
 3) **Monetization** (conversion lifts, paid exports, paid reports, subscriptions)
 4) **Distribution** (X, partnerships, affiliates, sponsorships)
@@ -32,17 +32,11 @@ Implement exactly ONE story per iteration.
 
 ### 3) Verify before commit
 Before committing, you MUST run:
-- `bun tsc`
+- `bun build`  (fixes any build errors)
+- `bun tsc` (fixes any typescript errors)
 - `bun test` (if it exists)
 - UI changes: `bun dev` and verify in a browser
-
-### 4) Commit only green
-Commit only when checks pass.
-
-Commit format:
-- `feat: [ID] - [Title]`
-- `fix: [ID] - [Title]`
-- `chore: [ID] - [Title]`
+- `bun build` again (to make sure the build is working)
 
 ### 5) Memory is files
 Persistent memory is ONLY:
@@ -57,11 +51,7 @@ Persistent memory is ONLY:
 - Never expose secret keys to client code.
 - If unsure whether something is secret: treat it as secret.
 
-### 7) Production Stripe guardrail
-Default to Stripe **test mode**.
-Touch **Production Stripe** only if a PRD story explicitly requires it and includes:
-- verification steps
-- rollback note in `@CHANGELOG.md`
+### 7) Production Stripe Always On
 
 ---
 

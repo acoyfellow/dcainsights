@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Lock, Play, FileText, Download, ChevronRight } from 'lucide-svelte';
+  import { Lock, Play, FileText, Download, ChevronRight, Check } from 'lucide-svelte';
   import { isPremium, userTier } from '$lib/stores/user';
   
   const courses = [
