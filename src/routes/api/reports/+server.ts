@@ -1,10 +1,14 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-// In-memory fallback for local development without KV
+// In-memory storage for shareable reports
+// NOTE: For production persistence across deployments, add Cloudflare KV:
+// 1. Create token with KV permissions at https://dash.cloudflare.com/profile/api-tokens
+// 2. Run: npx wrangler kv:namespace create "REPORTS_KV"
+// 3. Update wrangler.jsonc with the namespace binding
 const inMemoryReports = new Map<string, { data: object; createdAt: number }>();
 
-export const POST: RequestHandler = async ({ request, platform }) => {
+export const POST: RequestHandler = async ({ request }) => {
   try {
     const { id, data } = await request.json();
 
@@ -17,16 +21,8 @@ export const POST: RequestHandler = async ({ request, platform }) => {
       createdAt: Date.now(),
     };
 
-    // Try to use KV if available (production)
-    if (platform && 'env' in platform && (platform as { env: Record<string, unknown> }).env.REPORTS_KV) {
-      const kv = (platform as { env: { REPORTS_KV: { put: (key: string, value: string, options?: { expirationTtl?: number }) => Promise<void> } } }).env.REPORTS_KV;
-      await kv.put(id, JSON.stringify(reportData), {
-        expirationTtl: 30 * 24 * 60 * 60, // 30 days
-      });
-    } else {
-      // Fallback for local development
-      inMemoryReports.set(id, reportData);
-    }
+    // Store in memory (per-deployment instance)
+    inMemoryReports.set(id, reportData);
 
     return json({ success: true, id });
   } catch (err) {
@@ -38,7 +34,7 @@ export const POST: RequestHandler = async ({ request, platform }) => {
   }
 };
 
-export const GET: RequestHandler = async ({ url, platform }) => {
+export const GET: RequestHandler = async ({ url }) => {
   try {
     const id = url.searchParams.get('id');
 
@@ -46,22 +42,10 @@ export const GET: RequestHandler = async ({ url, platform }) => {
       throw error(400, 'Report ID is required');
     }
 
-    let reportData: { data: object; createdAt: number } | null = null;
-
-    // Try to use KV if available (production)
-    if (platform && 'env' in platform && (platform as { env: Record<string, unknown> }).env.REPORTS_KV) {
-      const kv = (platform as { env: { REPORTS_KV: { get: (key: string) => Promise<string | null> } } }).env.REPORTS_KV;
-      const stored = await kv.get(id);
-      if (stored) {
-        reportData = JSON.parse(stored);
-      }
-    } else {
-      // Fallback for local development
-      reportData = inMemoryReports.get(id) || null;
-    }
+    const reportData = inMemoryReports.get(id);
 
     if (!reportData) {
-      throw error(404, 'Report not found');
+      throw error(404, 'Report not found or expired');
     }
 
     return json({ success: true, ...reportData });
