@@ -73,10 +73,11 @@ If a story needs a secret and it’s missing:
 - STRIPE_PUBLISHABLE_KEY (client ok)
 
 ### Cloudflare (deploy/ops)
-- CLOUDFLARE_API_TOKEN (server/CI only)
-- CLOUDFLARE_EMAIL (server/CI only; only if tooling requires it)
-- CLOUDFLARE_ACCOUNT_ID (server/CI only)
-- CLOUDFLARE_ZONE_ID (required for cache purge in GitHub Action)
+- CLOUDFLARE_API_TOKEN (required: deploy + cache purge API calls)
+  - Permissions needed: Workers & Pages:Edit, Account Settings:Read, Cache Purge:Edit
+- CLOUDFLARE_ACCOUNT_ID (required: Pages/Workers deployment)
+- CLOUDFLARE_ZONE_ID (required for cache purge in GitHub Action; get from DNS settings)
+- CLOUDFLARE_EMAIL (NOT NEEDED - only for legacy API key auth; use API token instead)
 
 ### Other
 - GCP_API_KEY (document usage/scope in `@CHANGELOG.md`)
