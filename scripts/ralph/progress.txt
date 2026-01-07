@@ -1,0 +1,27 @@
+## Codebase Patterns
+
+- Always verify ALL linked pages return 200 before pushing homepage updates
+- Missing icon imports cause 500 errors (e.g., Check, ArrowRight, ShareButtons)
+- User tier system: use `isPro` from `$lib/stores/user` for Pro/Premium checks
+- Export functionality: use Blob + URL.createObjectURL for client-side CSV downloads
+
+## 2026-01-07 - MON-001
+
+**What was implemented**
+- Added Export CSV button to S&P 500 DCA Calculator
+- Pro/Premium users can download CSV directly
+- Free users are redirected to /pricing with upgrade parameter
+- Button shows lock icon for non-Pro users
+
+**Files changed**
+- src/routes/sp500-dca-calculator/+page.svelte
+- scripts/ralph/prd.json (marked MON-001 complete)
+
+**Learnings**
+- User tier is reactive: use `$isPro` in Svelte templates
+- Stripe checkout flow: POST to /api/stripe/checkout with planId and billingInterval
+- No server-side code needed for export - can generate CSV entirely client-side
+
+**Bug fixes also included**
+- Fixed /education page: added missing Check icon import
+- Fixed /blog/ultimate-guide-to-dollar-cost-averaging: added missing ArrowRight import and ShareButtons component import
