@@ -1,14 +1,10 @@
 import { json, error } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-// In-memory storage for shareable reports
-// NOTE: For production persistence across deployments, add Cloudflare KV:
-// 1. Create token with KV permissions at https://dash.cloudflare.com/profile/api-tokens
-// 2. Run: npx wrangler kv:namespace create "REPORTS_KV"
-// 3. Update wrangler.jsonc with the namespace binding
+// In-memory fallback for local development without KV
 const inMemoryReports = new Map<string, { data: object; createdAt: number }>();
 
-export const POST: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request, platform }) => {
   try {
     const { id, data } = await request.json();
 
@@ -21,8 +17,15 @@ export const POST: RequestHandler = async ({ request }) => {
       createdAt: Date.now(),
     };
 
-    // Store in memory (per-deployment instance)
-    inMemoryReports.set(id, reportData);
+    // Try to use KV if available (production)
+    if (platform?.env?.REPORTS_KV) {
+      await platform.env.REPORTS_KV.put(id, JSON.stringify(reportData), {
+        expirationTtl: 30 * 24 * 60 * 60, // 30 days
+      });
+    } else {
+      // Fallback for local development
+      inMemoryReports.set(id, reportData);
+    }
 
     return json({ success: true, id });
   } catch (err) {
@@ -34,7 +37,7 @@ export const POST: RequestHandler = async ({ request }) => {
   }
 };
 
-export const GET: RequestHandler = async ({ url }) => {
+export const GET: RequestHandler = async ({ url, platform }) => {
   try {
     const id = url.searchParams.get('id');
 
@@ -42,10 +45,21 @@ export const GET: RequestHandler = async ({ url }) => {
       throw error(400, 'Report ID is required');
     }
 
-    const reportData = inMemoryReports.get(id);
+    let reportData: { data: object; createdAt: number } | null = null;
+
+    // Try to use KV if available (production)
+    if (platform?.env?.REPORTS_KV) {
+      const stored = await platform.env.REPORTS_KV.get(id);
+      if (stored) {
+        reportData = JSON.parse(stored);
+      }
+    } else {
+      // Fallback for local development
+      reportData = inMemoryReports.get(id) || null;
+    }
 
     if (!reportData) {
-      throw error(404, 'Report not found or expired');
+      throw error(404, 'Report not found');
     }
 
     return json({ success: true, ...reportData });
