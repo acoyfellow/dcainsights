@@ -44,14 +44,14 @@
       "id": "REV-004",
       "title": "Implement Conversion Tracking Dashboard",
       "priority": 4,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Track: view → signup → checkout → purchase",
         "Dashboard shows MRR growth",
         "Identify conversion bottlenecks",
         "bun tsc passes"
       ],
-      "notes": "DATA-001 events API exists - need analytics UI to view funnel data"
+      "notes": "Analytics dashboard created at /admin/analytics. Shows MRR, conversion funnel, and path to $1M MRR."
     },
     {
       "id": "REV-005",
