@@ -30,7 +30,25 @@ export const POST: RequestHandler = async ({ request }) => {
       case STRIPE_WEBHOOK_EVENTS.CHECKOUT_COMPLETED: {
         const session = event.data.object;
         const customerId = session.customer as string;
+        const amountTotal = session.amount_total || 0;
         
+        // Log purchase event for analytics
+        try {
+          await fetch(`${process.env.PLATFORM_URL || ''}/api/events`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'purchase',
+              value: amountTotal / 100, // Convert cents to dollars
+              metadata: {
+                sessionId: session.id,
+                customerId,
+                currency: session.currency,
+              }
+            })
+          }).catch(() => {}); // Don't fail webhook if event logging fails
+        } catch {}
+
         const user = await db.getUserByStripeCustomerId(customerId);
         if (user) {
           await db.updateUser(user.id, { subscriptionTier: 'free' });
