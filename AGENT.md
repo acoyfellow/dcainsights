@@ -82,36 +82,28 @@ If a story needs a secret and it’s missing:
   - Get from: DNS settings for dcainsights.com
 - CLOUDFLARE_EMAIL (NOT NEEDED - only for legacy API key auth)
 
-## Deployment (Native Cloudflare Pages)
+## Deployment (Native Cloudflare Workers/Pages)
 
-**Cloudflare Pages auto-deploys on push to main.** No GitHub Actions needed.
-
-Deployment flow:
-```
-git push origin main
-    ↓
-Cloudflare Pages detects commit
-    ↓
-Build: bun install && bun run build
-    ↓
-Deploy: npx wrangler deploy (via Pages build settings)
-    ↓
-Live at dcainsights.com
-```
-
-## KV Namespace Setup
-
-For shareable report links (MON-002):
+**Cloudflare Workers/Pages deploys with `npx wrangler deploy`.**
 
 ```bash
-# Run locally with your Cloudflare credentials
-bash scripts/create-kv.sh
+# Deploy from local
+export CLOUDFLARE_API_TOKEN=...
+export CLOUDFLARE_ACCOUNT_ID=...
+npx wrangler deploy
 ```
 
-This will:
-1. Create a KV namespace via Cloudflare API
-2. Update `wrangler.jsonc` with the real namespace ID
-3. Commit and push (triggering redeploy)
+Cloudflare Pages also auto-deploys on push to main if configured in dashboard.
+
+## KV Namespace (Optional)
+
+For persistent shareable report links across deployments:
+
+1. Create token with KV permissions at https://dash.cloudflare.com/profile/api-tokens
+2. Run: `npx wrangler kv:namespace create "REPORTS_KV"`
+3. Update `wrangler.jsonc` with the namespace binding
+
+Without KV, share links use in-memory storage (works within single deployment instance).
 
 ### Other
 - GCP_API_KEY (document usage/scope in `@CHANGELOG.md`)
