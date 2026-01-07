@@ -130,8 +130,10 @@ Without KV, share links use in-memory storage (works within single deployment in
 5) Implement ONLY that story
 6) Run checks:
    - `bun tsc`
-   - tests if present
-   - `bun dev` + browser verification for UI changes
+   - `bun run build`
+   - Start dev server: `npx wrangler dev -- bun dev`
+   - Run E2E tests: `bash scripts/test-e2e.sh`
+   - Fix any failures before proceeding
 7) Update memory:
    - Append learnings to `scripts/ralph/progress.txt`
    - Append decisions/strategy to `@CHANGELOG.md`
