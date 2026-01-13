@@ -1,7 +1,7 @@
 # AGENTS
 
 PAUSED: false
-BRANCH: main
+BRANCH: copilot/setup-ralph-loop
 MAX_FAILURE_RETRIES: 3
 
 ## Loop contract

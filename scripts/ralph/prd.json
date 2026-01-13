@@ -1,5 +1,5 @@
 {
-  "branchName": "ralph/loop",
+  "branchName": "copilot/setup-ralph-loop",
   "maxFailureRetries": 3,
   "userStories": [
     {
@@ -17,7 +17,7 @@
     {
       "id": "S2",
       "title": "Add/verify diff guard in CI",
-      "status": "todo",
+      "status": "done",
       "priority": 2,
       "acceptanceCriteria": [
         "guard.sh blocks forbidden paths and large diffs",

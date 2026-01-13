@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.RALPH_PAT || secrets.RALPH_GITHUB_PAT }}
+          token: ${{ secrets.RALPH_PAT || secrets.RALPH_GITHUB_PAT || github.token }}
 
       - name: Use Node.js 20
         uses: actions/setup-node@v4
@@ -110,6 +110,48 @@ jobs:
             echo "No failure state to commit"
           else
             git commit -m "chore: record guard failure"
+            git push origin HEAD
+          fi
+          exit 1
+
+      - name: Record iteration failure
+        if: failure() && steps.guard.outcome != 'failure'
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          max_failures=$(jq -r '.maxFailureRetries // 3' scripts/ralph/constraints.json)
+          tmp_file=$(mktemp)
+          if jq --arg run "${RUN_URL}" --arg msg "iteration failed" --arg now "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" '
+            .consecutiveFailures = (.consecutiveFailures // 0) + 1
+            | .lastRunUrl = $run
+            | .lastError = $msg
+            | .lastUpdated = $now
+          ' scripts/ralph/failure.json > "${tmp_file}"; then
+            mv "${tmp_file}" scripts/ralph/failure.json
+          else
+            echo "failed to update failure.json" >&2
+            exit 1
+          fi
+          failures=$(jq -r '.consecutiveFailures' scripts/ralph/failure.json)
+          if [ "${failures}" -ge "${max_failures}" ]; then
+            if grep -q '^PAUSED: ' AGENTS.md; then
+              sed -i 's/^PAUSED: .*/PAUSED: true/' AGENTS.md
+            else
+              echo "PAUSED: true" >> AGENTS.md
+            fi
+          fi
+
+      - name: Iteration failure commit
+        if: failure() && steps.guard.outcome != 'failure'
+        run: |
+          git config user.email "ralph-bot@users.noreply.github.com"
+          git config user.name "ralph-bot"
+          git add AGENTS.md scripts/ralph/failure.json
+          bash scripts/ralph/guard.sh scripts/ralph/constraints.json
+          if git diff --cached --quiet; then
+            echo "No failure state to commit"
+          else
+            git commit -m "chore: record iteration failure"
             git push origin HEAD
           fi
           exit 1

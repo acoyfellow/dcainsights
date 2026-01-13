@@ -89,6 +89,22 @@
 - Form validation: regex for email format, disable submit while submitting
 - Use existing toast notifications for feedback
 
+## 2026-01-13 - S2
+
+**What was implemented**
+- Hardened Ralph workflow: token fallback for checkout, failure logging/commit on any job failure, and pause after repeated failures.
+- Added general failure commit path to re-trigger loop even when guard doesn’t run.
+
+**Files changed**
+- .github/workflows/ralph.yml
+- AGENTS.md
+- scripts/ralph/prd.json
+- scripts/ralph/progress.txt
+
+**Learnings**
+- Checkout fails without a token; fall back to GITHUB_TOKEN when PAT absent to keep loop alive.
+- Use `if: failure()` steps to ensure failure state is recorded and pushed even when earlier steps fail.
+
 ## 2026-01-13 - S1
 
 **What was implemented**
