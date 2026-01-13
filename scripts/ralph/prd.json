@@ -1,70 +1,42 @@
 {
-  "branchName": "ralph/monetization",
+  "branchName": "ralph/loop",
+  "maxFailureRetries": 3,
   "userStories": [
     {
-      "id": "REV-001",
-      "title": "Create Stripe Products for DCA Insights (Pro $297/yr, Premium $597/yr)",
+      "id": "S1",
+      "title": "Boot Ralph automation scaffold",
+      "status": "done",
       "priority": 1,
-      "passes": true,
       "acceptanceCriteria": [
-        "Stripe products created for Pro tier ($297/year)",
-        "Stripe products created for Premium tier ($597/year)",
-        "Products visible in Stripe Dashboard",
-        "Price IDs match config"
+        "State files exist (prd, progress, constraints, failure)",
+        "AGENTS.md describes the loop and pause switch",
+        "Workflow and guard are present to run one iteration"
       ],
-      "notes": "Products created: prod_TkWD66mcwJ2Cn3 (Pro), prod_TkWEGooet1Sab0 (Premium). Prices: price_1Sn1BWF1oOQhJ3pzmrGJ0F05 ($297/yr), price_1Sn1BlF1oOQhJ3pz9j3iOl22 ($597/yr). Current MRR: $0. Target: $1M/month. Need ~3,400 subscribers at $297/mo or ~10,000 at $99/mo"
+      "notes": "Completed 2026-01-13: initial scaffold, guard, workflow, README docs."
     },
     {
-      "id": "REV-002",
-      "title": "Wire Stripe Products to Pricing Page",
+      "id": "S2",
+      "title": "Add/verify diff guard in CI",
+      "status": "todo",
       "priority": 2,
-      "passes": true,
       "acceptanceCriteria": [
-        "Pricing page shows DCA Insights products",
-        "Checkout creates subscriptions correctly",
-        "Webhooks update user tier on payment",
-        "bun tsc passes"
+        "guard.sh blocks forbidden paths and large diffs",
+        "constraints.json enforced in workflow",
+        "CI run shows guard executed"
       ],
-      "notes": "Pricing page already uses SUBSCRIPTION_PLANS with correct price IDs. Checkout flow wired to Stripe."
+      "notes": "Run guard before committing. Keep changes minimal."
     },
     {
-      "id": "REV-003",  
-      "title": "Add User Tier Enforcement to Protected Features",
+      "id": "S3",
+      "title": "Make README describe how to run the Ralph loop",
+      "status": "todo",
       "priority": 3,
-      "passes": true,
       "acceptanceCriteria": [
-        "CSV export checks Pro tier",
-        "Share links check Pro tier",
-        "Premium courses check Premium tier",
-        "bun dev verification works"
+        "README mentions AGENTS.md and state files",
+        "How to trigger workflow_dispatch manually",
+        "Notes on required secrets/PAT"
       ],
-      "notes": "Tier enforcement already implemented in calculator (isPro) and education page (userTier)."
-    },
-    {
-      "id": "REV-004",
-      "title": "Implement Conversion Tracking Dashboard",
-      "priority": 4,
-      "passes": true,
-      "acceptanceCriteria": [
-        "Track: view → signup → checkout → purchase",
-        "Dashboard shows MRR growth",
-        "Identify conversion bottlenecks",
-        "bun tsc passes"
-      ],
-      "notes": "Analytics dashboard created at /admin/analytics. Shows MRR, conversion funnel, and path to $1M MRR."
-    },
-    {
-      "id": "REV-005",
-      "title": "Launch Campaign to First 100 Paid Subscribers",
-      "priority": 5,
-      "passes": false,
-      "acceptanceCriteria": [
-        "Email list outreach (LEADS-001)",
-        "Social media launch",
-        "First 100 subscribers acquired",
-        "MRR > $8,000/month"
-      ],
-      "notes": "Growth milestone: $8K MRR = 27 subscribers at $297/mo"
+      "notes": "Docs-only story."
     }
   ]
 }

@@ -1,0 +1,14 @@
+{
+  "maxFilesChanged": 20,
+  "maxAdditions": 800,
+  "maxDeletions": 800,
+  "forbiddenPaths": [
+    "node_modules",
+    ".env",
+    ".env.*",
+    "pnpm-lock.yaml",
+    "package-lock.yaml"
+  ],
+  "allowBinary": false,
+  "maxFailureRetries": 3
+}

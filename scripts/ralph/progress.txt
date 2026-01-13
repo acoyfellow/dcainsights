@@ -89,3 +89,22 @@
 - Form validation: regex for email format, disable submit while submitting
 - Use existing toast notifications for feedback
 
+## 2026-01-13 - S1
+
+**What was implemented**
+- Bootstrapped Ralph automation scaffold (AGENTS.md, state files, guard, workflow docs)
+
+**Files changed**
+- AGENTS.md
+- scripts/ralph/prd.json
+- scripts/ralph/progress.txt
+- scripts/ralph/constraints.json
+- scripts/ralph/failure.json
+- scripts/ralph/guard.sh
+- .opencode/opencode.json
+- .github/workflows/ralph.yml
+- README.md
+
+**Learnings**
+- Guard uses constraints.json for file/line limits and forbidden paths
+- Failure handling increments `consecutiveFailures` and can pause the loop when limits are exceeded

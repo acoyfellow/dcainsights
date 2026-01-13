@@ -1,0 +1,141 @@
+name: Ralph loop
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - "AGENTS.md"
+      - "scripts/ralph/**"
+      - ".opencode/**"
+
+permissions:
+  contents: write
+
+jobs:
+  iterate:
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      github.actor == 'ralph-bot' ||
+      github.actor == 'github-actions[bot]' ||
+      github.actor == 'copilot-swe-agent[bot]' ||
+      github.actor == 'Copilot'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RALPH_PAT || secrets.RALPH_GITHUB_PAT }}
+
+      - name: Use Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+
+      - name: Validate state JSON
+        run: |
+          jq empty scripts/ralph/prd.json
+          jq empty scripts/ralph/constraints.json
+          jq empty scripts/ralph/failure.json
+          jq empty .opencode/opencode.json
+
+      - name: Install OpenCode runner
+        run: npm install -g opencode@latest
+
+      - name: Run one Ralph iteration
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          if ! command -v opencode >/dev/null 2>&1; then
+            echo "opencode CLI is not available on PATH." >&2
+            exit 1
+          fi
+          opencode run --config .opencode/opencode.json --once
+
+      - name: Re-validate state JSON
+        run: |
+          jq empty scripts/ralph/prd.json
+          jq empty scripts/ralph/constraints.json
+          jq empty scripts/ralph/failure.json
+          jq empty .opencode/opencode.json
+
+      - name: Run guard
+        id: guard
+        continue-on-error: true
+        run: bash scripts/ralph/guard.sh scripts/ralph/constraints.json
+
+      - name: Reset workspace after guard failure
+        if: steps.guard.outcome == 'failure'
+        run: git reset --hard HEAD
+
+      - name: Record failure
+        if: steps.guard.outcome == 'failure'
+        env:
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          max_failures=$(jq -r '.maxFailureRetries // 3' scripts/ralph/constraints.json)
+          tmp_file=$(mktemp)
+          if jq --arg run "${RUN_URL}" --arg msg "guard failed" --arg now "$(date -u +"%Y-%m-%dT%H:%M:%SZ")" '
+            .consecutiveFailures = (.consecutiveFailures // 0) + 1
+            | .lastRunUrl = $run
+            | .lastError = $msg
+            | .lastUpdated = $now
+          ' scripts/ralph/failure.json > "${tmp_file}"; then
+            mv "${tmp_file}" scripts/ralph/failure.json
+          else
+            echo "failed to update failure.json" >&2
+            exit 1
+          fi
+          failures=$(jq -r '.consecutiveFailures' scripts/ralph/failure.json)
+          if [ "${failures}" -ge "${max_failures}" ]; then
+            if grep -q '^PAUSED: ' AGENTS.md; then
+              sed -i 's/^PAUSED: .*/PAUSED: true/' AGENTS.md
+            else
+              echo "PAUSED: true" >> AGENTS.md
+            fi
+          fi
+
+      - name: Guard failure commit
+        if: steps.guard.outcome == 'failure'
+        run: |
+          git config user.email "ralph-bot@users.noreply.github.com"
+          git config user.name "ralph-bot"
+          git add AGENTS.md scripts/ralph/failure.json
+          if git diff --cached --quiet; then
+            echo "No failure state to commit"
+          else
+            git commit -m "chore: record guard failure"
+            git push origin HEAD
+          fi
+          exit 1
+
+      - name: Reset failure counter
+        if: steps.guard.outcome == 'success'
+        run: |
+          current=$(jq -r '.consecutiveFailures // 0' scripts/ralph/failure.json)
+          if [ "${current}" -gt 0 ]; then
+            jq '.consecutiveFailures = 0' scripts/ralph/failure.json > scripts/ralph/failure.json.tmp
+            mv scripts/ralph/failure.json.tmp scripts/ralph/failure.json
+          fi
+
+      - name: Prepare git author
+        if: steps.guard.outcome == 'success'
+        run: |
+          git config user.email "ralph-bot@users.noreply.github.com"
+          git config user.name "ralph-bot"
+
+      - name: Commit changes
+        if: steps.guard.outcome == 'success'
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "chore: ralph iteration"
+            git push origin HEAD
+          fi
