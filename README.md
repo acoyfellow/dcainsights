@@ -48,3 +48,13 @@ This project is open source and available under the [MIT License](LICENSE).
 - Historical S&P 500 data from reliable financial data sources
 - Built with modern web technologies for optimal performance
 - Designed for both individual investors and financial education
+
+## Ralph loop automation
+
+This repo uses a lightweight Ralph loop to ship one story at a time.
+
+- State lives in `AGENTS.md`, `scripts/ralph/prd.json`, `scripts/ralph/progress.txt`, `scripts/ralph/constraints.json`, and `scripts/ralph/failure.json`.
+- The guard runs with `bash scripts/ralph/guard.sh scripts/ralph/constraints.json` and blocks large or risky diffs.
+- GitHub Actions workflow: `.github/workflows/ralph.yml` (trigger via `workflow_dispatch` or on pushes to Ralph state files).
+- Required secret: `RALPH_PAT` (or `RALPH_GITHUB_PAT`) with `repo` scope so the workflow can push updates.
+- Persistent memory is limited to repository files and commit history.

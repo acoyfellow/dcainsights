@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "agent": {
+    "entry": "AGENTS.md",
+    "state": [
+      "scripts/ralph/prd.json",
+      "scripts/ralph/progress.txt",
+      "scripts/ralph/constraints.json",
+      "scripts/ralph/failure.json"
+    ],
+    "workdir": "."
+  }
+}
