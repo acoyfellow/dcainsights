@@ -57,14 +57,29 @@
       "id": "REV-005",
       "title": "Launch Campaign to First 100 Paid Subscribers",
       "priority": 5,
-      "passes": false,
+      "passes": "blocked",
       "acceptanceCriteria": [
         "Email list outreach (LEADS-001)",
         "Social media launch",
         "First 100 subscribers acquired",
         "MRR > $8,000/month"
       ],
-      "notes": "Growth milestone: $8K MRR = 27 subscribers at $297/mo"
+      "notes": "Growth milestone: $8K MRR = 27 subscribers at $297/mo. BLOCKED: Requires human action for social media launch and tracking of business metrics."
+    },
+    {
+      "id": "SEO-001",
+      "title": "Add Retirement DCA Blog Post + High-Value SEO Content",
+      "priority": 6,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: how-to-build-retirement-wealth-with-dca (2500+ words)",
+        "Targets 'retirement investing', '401k DCA', 'IRA DCA' keywords",
+        "Internal links to calculator tools",
+        "Added to sitemap",
+        "bun tsc passes",
+        "bun build passes"
+      ],
+      "notes": "SEO content targeting high-intent retirement/401k keywords to drive organic traffic."
     }
   ]
 }
