@@ -1,209 +1,67 @@
-# AGENTS.md
+# DCA Insights - Agent Guide
 
-This repo is **open source** at github.com/acoyfellow/dcainsights. We work in public, in a positive, forward-thinking, optimistic manner, using only legal methods.
+Open source at github.com/acoyfellow/dcainsights. Work in public, positive, legal.
 
-Agents have push access via GitHub PAT configured in git remote.
+## What This Is
 
-This repo is operated by humans + coding agents. A Ralph-style loop may run in background:
-**pick ONE story → implement → verify → commit → mark done → repeat**.
+DCA Insights (dcainsights.com) - Educational tools and content for Dollar Cost Averaging investors.
 
-Pushes to main trigger Cloudflare deployments automatically.
+**Stack:** SvelteKit, Tailwind, Cloudflare Pages, Stripe
 
-**Worker coordination:** Before starting work, check `git log -1` and `git status`. If recent auto-rescue commits exist, another worker may be active. Keep responses SHORT to avoid token limit truncation.
+## What We Sell
 
----
+| Tier | Price | Features |
+|------|-------|----------|
+| Free | $0 | Basic calculators, historical data |
+| Pro | $9.99/mo | Advanced analytics, CSV export, ad-free |
+| Premium | $29.99/mo | All Pro + courses, API, backtesting |
 
-## STOP CONDITION (North Star)
+**Courses (Premium):**
+- DCA Masterclass (2.5hrs, 12 lessons)
+- Bear Market Survival (1.5hrs, 8 lessons)  
+- Tax-Optimized DCA (45min, 5 lessons)
 
-Stop only when **$1M MRR** with **≥90% profit margin** has been generated **legally** in **Production Stripe** for **DCAinsights.com**.
+## Current State (QA NEEDED)
 
-Otherwise: keep shipping.
+⚠️ **Known issues to fix:**
+- Course videos are PLACEHOLDERS (just alert boxes)
+- Need to verify all Stripe price IDs are real
+- 23 svelte-check warnings
+- Pre-push hook exists but disabled
 
----
+## Tools We Have
 
-## What to ship (priority order)
+- `/sp500-dca-calculator` - Main calculator
+- `/dca-vs-lump-sum` - Comparison tool
+- `/dca-timing-optimizer` - Best day to invest
+- `/bear-market-dca` - Bear market analysis
+- `/recession-dca` - Recession analysis
+- `/blog` - SEO content
+- `/education` - Courses (needs real content)
+- `/pricing` - Subscription plans
 
-1) **SEO traffic** (more keywords, more content, NEVER publish broken links, always update blog + sitemap + rss)
-2) **Better tools** (more useful + faster + shareable)
-3) **Monetization** (conversion lifts, paid exports, paid reports, subscriptions)
-4) **Quality assurance** (link testing, E2E tests, bug fixes)
-
-**NOT agent focus:** Distribution, social media, sharing mechanisms (human handles these)
-
----
-
-## Hard rules (non-negotiable)
-
-### 1) Work must be in PRD
-If it isn’t in `scripts/ralph/prd.json`, do not do it.
-
-### 2) One story per iteration
-Implement exactly ONE story per iteration.
-
-### 3) Verify before commit
-Before committing, you MUST run:
-- `bun build`  (fixes any build errors)
-- `bun tsc` (fixes any typescript errors)
-- `bun test` (if it exists)
-- UI changes: `bun dev` and verify in a browser
-- `bun build` again (to make sure the build is working)
-
-### 5) Memory is files
-Persistent memory is ONLY:
-- git commits
-- `scripts/ralph/prd.json` (task truth)
-- `scripts/ralph/progress.txt` (patterns + learnings)
-- `@CHANGELOG.md` (private decisions/strategy)
-
-### 6) Secrets are sacred
-- Never commit secrets.
-- Never paste secrets into logs/docs/issues.
-- Never expose secret keys to client code.
-- If unsure whether something is secret: treat it as secret.
-
-### 7) Production Stripe Always On
-
-### 8) You can push directly to `main` branch for quick updates, but always verify the build is working first, and the deploy has succeeded.
----
-
-## ENV / SECRETS (SOURCE OF TRUTH)
-
-Secrets live only in:
-- local `.env` (never committed)
-- GitHub Actions Secrets
-
-If a story needs a secret and it’s missing:
-- STOP
-- add it here
-- add usage + scope notes in `@CHANGELOG.md`
-
-### Stripe
-- STRIPE_TEST_SECRET_KEY (server only)
-- STRIPE_TEST_PUBLISHABLE_KEY (client ok)
-- STRIPE_SECRET_KEY (server only)
-- STRIPE_PUBLISHABLE_KEY (client ok)
-
-### Cloudflare (deploy/ops)
-- CLOUDFLARE_API_TOKEN (required for wrangler deploy + KV namespace creation)
-  - Permissions: Workers & Pages:Edit, Account Settings:Read, Cache Purge:Edit
-  - Get from: https://dash.cloudflare.com/profile/api-tokens
-- CLOUDFLARE_ACCOUNT_ID (required for wrangler deploy)
-  - Get from: Workers & Pages → Settings → Account ID
-- CLOUDFLARE_ZONE_ID (optional: for cache purge via Cloudflare API)
-  - Get from: DNS settings for dcainsights.com
-- CLOUDFLARE_EMAIL (NOT NEEDED - only for legacy API key auth)
-
-## Deployment (Native Cloudflare Workers/Pages)
-
-**Cloudflare Workers/Pages deploys with `npx wrangler deploy`.**
+## Before Any Push
 
 ```bash
-# Deploy from local
-export CLOUDFLARE_API_TOKEN=...
-export CLOUDFLARE_ACCOUNT_ID=...
-npx wrangler deploy
+export PATH="$HOME/.bun/bin:$PATH"
+bun tsc          # Must pass
+bun run check    # Must be 0 errors
+bun run build    # Must succeed
 ```
 
-Cloudflare Pages also auto-deploys on push to main if configured in dashboard.
+## Priorities
 
-## KV Namespace (Optional)
+1. **Make existing features WORK** - No fake placeholders
+2. **QA everything** - Test all links, forms, payments
+3. **Fix bugs** - Resolve warnings, broken paths
+4. **Then** new content
 
-For persistent shareable report links across deployments:
+## Secrets
 
-1. Create token with KV permissions at https://dash.cloudflare.com/profile/api-tokens
-2. Run: `npx wrangler kv:namespace create "REPORTS_KV"`
-3. Update `wrangler.jsonc` with the namespace binding
+Live in `.env` (never commit):
+- STRIPE_SECRET_KEY / STRIPE_PUBLISHABLE_KEY
+- CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID
 
-Without KV, share links use in-memory storage (works within single deployment instance).
+## Deploy
 
-### Other
-- GCP_API_KEY (document usage/scope in `@CHANGELOG.md`)
-- GITHUB_API_KEY (server/CI only)
-- X_HANDLE
-- X_PASSWORD
-
----
-
-## Repo assumptions (SvelteKit)
-
-- This is a SvelteKit app.
-- Cloudflare hosts the website and deploys from pushes to `main`.
-
----
-
-## Iteration checklist (do in order)
-
-### 0) HANDOFF CHECK (REQUIRED FIRST)
-```bash
-# Check state and pick up where last worker left off
-cat scripts/ralph/state.json
-git log --oneline -3
-git status --short
-```
-If `state.json` shows `status: "in_progress"`, CONTINUE that story.
-If truncation occurred (check last conversation), resume from checkpoint.
-
-### 1) Claim work
-```bash
-# Update state.json with your work
-echo '{"lastUpdated":"'$(date -Iseconds)'","currentStory":"STORY-ID","status":"in_progress","checkpoint":"starting"}' > scripts/ralph/state.json
-```
-
-2) Read `scripts/ralph/prd.json`
-3) Read `scripts/ralph/progress.txt` (Codebase Patterns first)
-4) Pick the ONE story with the lowest `priority` where `passes:false` (or continue in-progress)
-5) Implement ONLY that story - keep responses SHORT to avoid truncation
-6) Run checks: `bun tsc && bun run build`
-7) Update checkpoint frequently:
-```bash
-echo '{"lastUpdated":"'$(date -Iseconds)'","currentStory":"STORY-ID","status":"in_progress","checkpoint":"description of where you are"}' > scripts/ralph/state.json
-```
-8) Commit (green only): `feat|fix|chore: [ID] - [Title]`
-9) Update `scripts/ralph/prd.json`: set story `passes:true`
-10) Mark complete:
-```bash
-echo '{"lastUpdated":"'$(date -Iseconds)'","currentStory":null,"status":"idle","checkpoint":null}' > scripts/ralph/state.json
-```
-11) Push all changes including state.json
-
----
-
-## Progress log format (`scripts/ralph/progress.txt`)
-
-Top of file accumulates reusable patterns:
-
-## Codebase Patterns
-- (Add patterns here)
-
-Append after each completed story:
-
-## YYYY-MM-DD - [Story ID]
-- What was implemented
-- Files changed
-- **Learnings:**
-  - Patterns discovered
-  - Gotchas encountered
----
-
----
-
-## Completion signal
-
-If ALL stories have `passes:true`, output exactly:
-
-<promise>COMPLETE</promise>
-
----
-
-## Pre-push Gate (MANDATORY)
-
-A strong pre-push hook runs automatically on `git push`. It will BLOCK pushes that fail:
-
-1. **bun tsc** - TypeScript errors
-2. **bun run check** - Svelte check
-3. **bun run build** - Production build
-4. **Smoke tests** - Key routes return 200
-
-If blocked, FIX THE ISSUES before pushing. Do not bypass.
-
-To test manually: `bash .githooks/pre-push`
+Push to `main` → Cloudflare auto-deploys
