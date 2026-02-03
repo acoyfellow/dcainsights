@@ -112,3 +112,22 @@
 - ShareButtons component reused across blog posts
 - Add 'Retirement' category to blog categories array
 - Auto-rescue commits may run - check git log before committing
+
+## 2026-02-03 - SEO-001 (expansion)
+
+**What was implemented**
+- Expanded retirement DCA blog post from 1756 to 2662 words
+- Added 3 new major sections:
+  - Maximizing Employer Match Returns (vesting, true-up feature)
+  - Roth vs Traditional: The DCA Decision (tax bracket framework, backdoor strategies)
+  - DCA for FIRE (Financial Independence, Retire Early)
+- Added mega backdoor Roth and Roth conversion ladder strategies
+- Enhanced internal linking to calculator tools
+
+**Files changed**
+- src/routes/blog/how-to-build-retirement-wealth-with-dca/+page.svelte
+
+**Learnings**
+- Blog post already existed from auto-rescue but was under 2500 words
+- Dev server issues with wrangler - use `bun run build` to verify instead
+- Build is the source of truth for code validity
