@@ -4,7 +4,8 @@ import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
-    const { email, name } = await request.json();
+    const body = await request.json() as { email?: string; name?: string };
+    const { email, name } = body;
     
     if (!email) {
       throw error(400, 'Email is required');

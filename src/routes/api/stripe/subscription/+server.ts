@@ -57,7 +57,8 @@ export const POST: RequestHandler = async ({ request }) => {
       throw error(400, 'No active subscription found');
     }
     
-    const { action, newPriceId } = await request.json();
+    const body = await request.json() as { action?: string; newPriceId?: string };
+    const { action, newPriceId } = body;
     
     switch (action) {
       case 'cancel': {

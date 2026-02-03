@@ -5,7 +5,8 @@ const subscribers: Map<string, { email: string; subscribedAt: number; tier: stri
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
-    const { email, tier = 'free' } = await request.json();
+    const body = await request.json() as { email?: string; tier?: string };
+    const { email, tier = 'free' } = body;
     
     if (!email) {
       throw error(400, 'Email is required');

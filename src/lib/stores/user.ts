@@ -35,7 +35,7 @@ function createUserStore() {
       try {
         const response = await fetch('/api/user/me');
         if (response.ok) {
-          const user = await response.json();
+          const user = await response.json() as AuthSession;
           update(state => ({ ...state, user, loading: false, initialized: true }));
         } else {
           update(state => ({ ...state, user: null, loading: false, initialized: true }));

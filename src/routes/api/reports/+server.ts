@@ -6,7 +6,8 @@ const inMemoryReports = new Map<string, { data: object; createdAt: number }>();
 
 export const POST: RequestHandler = async ({ request, platform }) => {
   try {
-    const { id, data } = await request.json();
+    const body = await request.json() as { id?: string; data?: object };
+    const { id, data } = body;
 
     if (!id || !data) {
       throw error(400, 'Report ID and data are required');

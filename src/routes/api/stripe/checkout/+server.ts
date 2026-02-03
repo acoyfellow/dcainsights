@@ -11,7 +11,8 @@ export const POST: RequestHandler = async ({ request, url }) => {
       throw error(500, 'Stripe is not configured');
     }
     
-    const { planId, billingInterval, email, name } = await request.json();
+    const body = await request.json() as { planId?: string; billingInterval?: string; email?: string; name?: string };
+    const { planId, billingInterval, email, name } = body;
     
     if (!planId || !billingInterval) {
       throw error(400, 'Missing required fields: planId, billingInterval');

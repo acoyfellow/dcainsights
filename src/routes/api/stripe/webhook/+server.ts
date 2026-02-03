@@ -78,7 +78,7 @@ export const POST: RequestHandler = async ({ request }) => {
             tier,
             subscriptionId: subscription.id,
             status: status as 'active' | 'canceled' | 'past_due' | 'trialing',
-            periodEnd: subscription.current_period_end * 1000
+            periodEnd: (subscription.items?.data?.[0]?.current_period_end ?? Math.floor(Date.now() / 1000)) * 1000
           });
         }
         break;
