@@ -99,6 +99,12 @@ const routes = [
     description: 'DCA for Beginners: Complete Guide to Dollar Cost Averaging'
   },
   {
+    url: '/blog/compound-interest-dca-calculator',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'Compound Interest + DCA Calculator: How Your Money Grows Exponentially'
+  },
+  {
     url: '/about',
     changeFreq: 'monthly',
     priority: '0.6',

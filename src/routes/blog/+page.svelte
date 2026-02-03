@@ -42,6 +42,16 @@
       image: '/og.png'
     },
     {
+      slug: 'compound-interest-dca-calculator',
+      title: 'Compound Interest + DCA Calculator: How Your Money Grows Exponentially',
+      excerpt: 'Learn how compound interest supercharges your DCA investments. Includes interactive examples showing how $500/month becomes $1M+.',
+      date: '2026-02-03',
+      readTime: '12 min read',
+      category: 'Education',
+      featured: true,
+      image: '/og.png'
+    },
+    {
       slug: 'ultimate-guide-to-dollar-cost-averaging',
       title: 'The Ultimate Guide to Dollar Cost Averaging in 2026',
       excerpt: 'Learn how DCA works, why it beats timing the market, and how to implement it for long-term wealth building.',
