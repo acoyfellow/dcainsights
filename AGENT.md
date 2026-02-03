@@ -9,6 +9,8 @@ This repo is operated by humans + coding agents. A Ralph-style loop may run in b
 
 Pushes to main trigger Cloudflare deployments automatically.
 
+**Worker coordination:** Before starting work, check `git log -1` and `git status`. If recent auto-rescue commits exist, another worker may be active. Keep responses SHORT to avoid token limit truncation.
+
 ---
 
 ## STOP CONDITION (North Star)
