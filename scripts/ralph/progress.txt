@@ -163,3 +163,16 @@
   - CTAs to calculator tools drive traffic between pages
   - Keywords: "best S&P 500 index fund", "VOO vs SPY vs IVV", "low cost index funds"
 ---
+
+## 2026-02-03 - SEO-003
+- Implemented: "How Much to Invest Monthly" blog post (2500+ words)
+- Files: src/routes/blog/how-much-to-invest-monthly-dca-guide/+page.svelte
+- Features:
+  - Interactive monthly investment calculator with personalized recommendations
+  - 10-year projections based on S&P 500 historical returns
+  - Income-based examples table
+  - Life stage investment strategies
+  - FAQ section targeting long-tail keywords
+- **Learnings:**
+  - Interactive calculators boost engagement and SEO (users stay longer)
+  - Internal linking to tools like /sp500-dca-calculator helps conversions

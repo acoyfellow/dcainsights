@@ -46,7 +46,7 @@
       "priority": 4,
       "passes": true,
       "acceptanceCriteria": [
-        "Track: view → signup → checkout → purchase",
+        "Track: view \u2192 signup \u2192 checkout \u2192 purchase",
         "Dashboard shows MRR growth",
         "Identify conversion bottlenecks",
         "bun tsc passes"
@@ -102,7 +102,7 @@
       "id": "SEO-003",
       "title": "Add How Much to Invest Monthly Blog Post",
       "priority": 8,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Blog post: how-much-to-invest-monthly-dca-guide (2500+ words)",
         "Targets: how much to invest monthly, DCA amount calculator, investment amount guide",
