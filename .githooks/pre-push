@@ -1,0 +1,78 @@
+#!/bin/bash
+# STRONG pre-push hook - protects agents from pushing broken code
+# Install: git config core.hooksPath .githooks
+
+export PATH="$HOME/.bun/bin:$PATH"
+set -e  # Exit on ANY failure
+
+echo "🔒 PRE-PUSH GATE - All checks must pass"
+echo "========================================="
+
+# 1. TypeScript check
+echo ""
+echo "📝 [1/4] Type checking..."
+bun tsc
+echo "✅ Types OK"
+
+# 2. Svelte check  
+echo ""
+echo "🔍 [2/4] Svelte check..."
+bun run check
+echo "✅ Svelte OK"
+
+# 3. Full build
+echo ""
+echo "🔨 [3/4] Production build..."
+bun run build
+echo "✅ Build OK"
+
+# 4. E2E tests on built output (if local server available) or critical link checks
+echo ""
+echo "🧪 [4/4] Critical path tests..."
+
+# Test that build output exists
+if [ ! -d ".svelte-kit/output" ]; then
+    echo "❌ Build output missing!"
+    exit 1
+fi
+
+# Quick smoke test on key routes (checks for 500 errors in SSR)
+ROUTES=(
+    "/"
+    "/sp500-dca-calculator"
+    "/pricing"
+    "/blog"
+)
+
+# Try to start preview server briefly for smoke test
+echo "Starting preview server for smoke test..."
+timeout 30s bun run preview --port 4174 &
+PREVIEW_PID=$!
+sleep 5
+
+FAILED=0
+for route in "${ROUTES[@]}"; do
+    STATUS=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:4174$route" 2>/dev/null || echo "000")
+    if [ "$STATUS" = "200" ]; then
+        echo "  ✅ $route"
+    else
+        echo "  ❌ $route (HTTP $STATUS)"
+        FAILED=1
+    fi
+done
+
+# Clean up preview server
+kill $PREVIEW_PID 2>/dev/null || true
+
+if [ "$FAILED" = "1" ]; then
+    echo ""
+    echo "❌ SMOKE TEST FAILED - Push blocked!"
+    exit 1
+fi
+
+echo "✅ Smoke tests OK"
+
+echo ""
+echo "========================================="
+echo "✅ ALL GATES PASSED - Push allowed"
+echo "========================================="
