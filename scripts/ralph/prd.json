@@ -28,7 +28,7 @@
       "notes": "Pricing page already uses SUBSCRIPTION_PLANS with correct price IDs. Checkout flow wired to Stripe."
     },
     {
-      "id": "REV-003",  
+      "id": "REV-003",
       "title": "Add User Tier Enforcement to Protected Features",
       "priority": 3,
       "passes": true,
@@ -97,6 +97,54 @@
         "bun build passes"
       ],
       "notes": "High-intent keyword targeting people ready to start investing. Drives traffic to calculator."
+    },
+    {
+      "id": "SEO-003",
+      "title": "Add How Much to Invest Monthly Blog Post",
+      "priority": 8,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: how-much-to-invest-monthly-dca-guide (2500+ words)",
+        "Targets: how much to invest monthly, DCA amount calculator, investment amount guide",
+        "Interactive calculator or examples",
+        "Internal links to SP500 calculator",
+        "Added to sitemap",
+        "bun tsc passes",
+        "bun build passes"
+      ],
+      "notes": "High-intent keyword for people ready to start investing but unsure of amounts."
+    },
+    {
+      "id": "SEO-004",
+      "title": "Add DCA for Beginners Complete Guide",
+      "priority": 9,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: dca-for-beginners-complete-guide (3000+ words)",
+        "Targets: how to start dollar cost averaging, DCA for beginners, investment automation",
+        "Step-by-step getting started guide",
+        "Broker comparison section",
+        "Internal links to all calculator tools",
+        "Added to sitemap",
+        "bun tsc passes"
+      ],
+      "notes": "Entry-level content to capture beginners searching for how to start."
+    },
+    {
+      "id": "SEO-005",
+      "title": "Add Compound Interest with DCA Calculator Blog Post",
+      "priority": 10,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: compound-interest-dca-calculator (2500+ words)",
+        "Targets: compound interest calculator, DCA compound growth, investment growth calculator",
+        "Visual compound growth examples",
+        "Interactive projection examples",
+        "Internal links to tools",
+        "Added to sitemap",
+        "bun tsc passes"
+      ],
+      "notes": "Compound interest is high-search-volume term, connect to DCA strategy."
     }
   ]
 }
