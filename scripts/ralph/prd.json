@@ -59,7 +59,7 @@
       "id": "SEO-005",
       "title": "Add Compound Interest with DCA Calculator Blog Post",
       "priority": 10,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Blog post: compound-interest-dca-calculator (2500+ words)",
         "Targets: compound interest calculator, DCA compound growth, investment growth calculator",

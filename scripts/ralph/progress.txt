@@ -17,3 +17,15 @@
   - Blog posts can have interactive Svelte components inline
   - Broker comparison tables drive engagement
 ---
+
+## 2026-02-03 - SEO-005
+- What was implemented: Compound Interest + DCA Calculator blog post (2656 words)
+- Files changed: 
+  - src/routes/blog/compound-interest-dca-calculator/+page.svelte (new)
+  - src/routes/blog/+page.svelte (added to index)
+  - src/routes/sitemap.xml/+server.ts (added route)
+- **Learnings:**
+  - Interactive Svelte calculators work well for blog engagement
+  - Visual progress bars make financial data more compelling
+  - FAQ section boosts SEO and word count effectively
+---
