@@ -1,0 +1,80 @@
+{
+  "courses": [
+    {
+      "id": "dca-masterclass",
+      "title": "DCA Masterclass: Complete Guide to Dollar Cost Averaging",
+      "description": "Master the art of systematic investing with our comprehensive course. Learn why DCA works, build your personal plan, automate everything, and see real-world results.",
+      "tier": "pro",
+      "priceOneTime": 4900,
+      "priceMonthly": 999,
+      "duration": "90 minutes",
+      "lessons": 4,
+      "featured": true,
+      "topics": [
+        "Understanding market volatility",
+        "Building your investment strategy",
+        "Portfolio allocation basics",
+        "Automating your investments",
+        "Real-world performance examples"
+      ],
+      "features": [
+        "4 comprehensive video lessons",
+        "Written DCA plan template",
+        "Automation setup guides",
+        "Case study analysis",
+        "Lifetime access",
+        "Download resources"
+      ]
+    },
+    {
+      "id": "bear-market-survival",
+      "title": "Surviving Bear Markets: DCA Strategies That Work",
+      "description": "Learn how to maintain discipline during market downturns and turn crashes into opportunities. Real data from 2022 bear market.",
+      "tier": "premium",
+      "priceOneTime": 7900,
+      "priceMonthly": 2999,
+      "duration": "60 minutes",
+      "lessons": 3,
+      "featured": false,
+      "topics": [
+        "Psychology of market crashes",
+        "Accumulation strategies",
+        "When to increase contributions",
+        "2022 crash case study",
+        "Historical performance analysis"
+      ],
+      "features": [
+        "3 focused video lessons",
+        "Crash playbook template",
+        "Decision flowchart",
+        "Historical data analysis",
+        "Lifetime access"
+      ]
+    },
+    {
+      "id": "tax-optimized-dca",
+      "title": "Tax-Optimized DCA Strategies",
+      "description": "Maximize after-tax returns with smart DCA implementation. Master tax-loss harvesting, account selection, and year-end planning.",
+      "tier": "premium",
+      "priceOneTime": 5900,
+      "priceMonthly": 2999,
+      "duration": "45 minutes",
+      "lessons": 3,
+      "featured": false,
+      "topics": [
+        "Tax-loss harvesting",
+        "Account type optimization",
+        "Asset location strategies",
+        "Year-end planning",
+        "Wash sale rules"
+      ],
+      "features": [
+        "3 detailed video lessons",
+        "Tax optimization worksheet",
+        "Account prioritization tool",
+        "Year-end checklist",
+        "Lifetime access"
+      ]
+    }
+  ]
+}
