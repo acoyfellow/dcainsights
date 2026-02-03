@@ -1,7 +1,13 @@
 # AGENTS.md
 
-This repo is operated by humans + coding agents using a Ralph-style loop:
+This repo is **open source** at github.com/acoyfellow/dcainsights. We work in public, in a positive, forward-thinking, optimistic manner, using only legal methods.
+
+Agents have push access via GitHub PAT configured in git remote.
+
+This repo is operated by humans + coding agents. A Ralph-style loop may run in background:
 **pick ONE story → implement → verify → commit → mark done → repeat**.
+
+Pushes to main trigger Cloudflare deployments automatically.
 
 ---
 

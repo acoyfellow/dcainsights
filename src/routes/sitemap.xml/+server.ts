@@ -75,6 +75,12 @@ const routes = [
     description: 'DCA Crypto vs Stocks: Which Returns More?'
   },
   {
+    url: '/blog/how-to-build-retirement-wealth-with-dca',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'How to Build Retirement Wealth with Dollar Cost Averaging'
+  },
+  {
     url: '/about',
     changeFreq: 'monthly',
     priority: '0.6',

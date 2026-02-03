@@ -3,13 +3,23 @@
   
   const posts = [
     {
+      slug: 'how-to-build-retirement-wealth-with-dca',
+      title: 'How to Build Retirement Wealth with Dollar Cost Averaging',
+      excerpt: 'A comprehensive guide to using DCA in your 401(k), IRA, and brokerage accounts to build lasting retirement wealth.',
+      date: '2026-02-03',
+      readTime: '15 min read',
+      category: 'Retirement',
+      featured: true,
+      image: '/og.png'
+    },
+    {
       slug: 'ultimate-guide-to-dollar-cost-averaging',
       title: 'The Ultimate Guide to Dollar Cost Averaging in 2026',
       excerpt: 'Learn how DCA works, why it beats timing the market, and how to implement it for long-term wealth building.',
       date: '2026-01-05',
       readTime: '12 min read',
       category: 'Strategy',
-      featured: true,
+      featured: false,
       image: '/og.png'
     },
     {
@@ -64,7 +74,7 @@
     }
   ];
   
-  const categories = ['All', 'Strategy', 'Analysis', 'Comparison', 'Tax', 'News'];
+  const categories = ['All', 'Strategy', 'Retirement', 'Analysis', 'Comparison', 'Tax', 'News'];
   let selectedCategory = $state('All');
   let searchQuery = $state('');
   
