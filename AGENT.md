@@ -192,3 +192,18 @@ Append after each completed story:
 If ALL stories have `passes:true`, output exactly:
 
 <promise>COMPLETE</promise>
+
+---
+
+## Pre-push Gate (MANDATORY)
+
+A strong pre-push hook runs automatically on `git push`. It will BLOCK pushes that fail:
+
+1. **bun tsc** - TypeScript errors
+2. **bun run check** - Svelte check
+3. **bun run build** - Production build
+4. **Smoke tests** - Key routes return 200
+
+If blocked, FIX THE ISSUES before pushing. Do not bypass.
+
+To test manually: `bash .githooks/pre-push`
