@@ -57,7 +57,7 @@
       "id": "QA-001",
       "title": "Link Validation and E2E Test Suite",
       "priority": 5,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "All internal links return 200",
         "All sitemap URLs accessible",
