@@ -9,24 +9,32 @@ $1M MRR with ≥90% profit margin, legally, via Production Stripe for dcainsight
 
 ## Current Priority: PRODUCT AUDIT
 
+**Status**: AUDIT COMPLETE - DEFECTS IDENTIFIED
+**Build**: ✅ Passes | **TypeScript**: ✅ Passes | **Warnings**: 23 (a11y)
+
 We sell courses and tools. If they don't work, the business is trash.
 
 ### What We Sell
 
 | Tier | Price | Status |
 |------|-------|--------|
-| Free | $0 | ✅ Calculators work |
-| Pro | $9.99/mo | ⚠️ Need to verify Stripe |
+| Free | $0 | ⚠️ Calculators need verification |
+| Pro | $9.99/mo | ❌ Stripe price IDs hardcoded (test) |
 | Premium | $29.99/mo | ❌ Courses are FAKE |
 
 ### Courses (CRITICAL - Currently Broken)
 
 | Course | Tier | Status |
 |--------|------|--------|
-| DCA Masterclass (2.5hrs) | Pro | ❌ PLACEHOLDER - alert() only |
-| Bear Market Survival (1.5hrs) | Premium | ❌ PLACEHOLDER |
-| Tax-Optimized DCA (45min) | Premium | ❌ PLACEHOLDER |
-| Portfolio Guide PDF | Free | ⚠️ Exists but verify content |
+| DCA Masterclass (2.5hrs) | Pro | ❌ alert() placeholder @ line 90 |
+| Bear Market Survival (1.5hrs) | Premium | ❌ alert() placeholder @ line 90 |
+| Tax-Optimized DCA (45min) | Premium | ❌ alert() placeholder @ line 90 |
+| Portfolio Guide PDF | Free | ⚠️ Verify exists & works |
+
+### CRITICAL DEFECTS (Orchestrator Found)
+1. **FAKE COURSES**: `src/routes/education/+page.svelte:90` - startCourse() is alert() only
+2. **HARDCODED STRIPE IDs**: `src/lib/server/stripe.ts:16-27` - test price IDs, not live
+3. **23 a11y WARNINGS**: Form labels not associated with inputs
 
 ## Audit Checklist (Do First)
 
