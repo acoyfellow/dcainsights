@@ -54,17 +54,18 @@
       "notes": "Analytics dashboard created at /admin/analytics. Shows MRR, conversion funnel, and path to $1M MRR."
     },
     {
-      "id": "REV-005",
-      "title": "Launch Campaign to First 100 Paid Subscribers",
+      "id": "QA-001",
+      "title": "Link Validation and E2E Test Suite",
       "priority": 5,
-      "passes": "blocked",
+      "passes": false,
       "acceptanceCriteria": [
-        "Email list outreach (LEADS-001)",
-        "Social media launch",
-        "First 100 subscribers acquired",
-        "MRR > $8,000/month"
+        "All internal links return 200",
+        "All sitemap URLs accessible",
+        "E2E tests for calculator tools",
+        "E2E tests for checkout flow",
+        "No broken images or assets"
       ],
-      "notes": "Growth milestone: $8K MRR = 27 subscribers at $297/mo. BLOCKED: Requires human action for social media launch and tracking of business metrics."
+      "notes": "Quality assurance: ensure all links work, add automated E2E tests for critical user paths."
     },
     {
       "id": "SEO-001",
@@ -80,6 +81,22 @@
         "bun build passes"
       ],
       "notes": "SEO content targeting high-intent retirement/401k keywords to drive organic traffic."
+    },
+    {
+      "id": "SEO-002",
+      "title": "Add Best S&P 500 Index Funds Blog Post for DCA",
+      "priority": 7,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: best-sp500-index-funds-for-dca (2500+ words)",
+        "Targets 'best S&P 500 index fund', 'VOO vs SPY vs IVV', 'low cost index funds' keywords",
+        "Comparison table of top funds with expense ratios",
+        "Internal links to calculator tools",
+        "Added to sitemap",
+        "bun tsc passes",
+        "bun build passes"
+      ],
+      "notes": "High-intent keyword targeting people ready to start investing. Drives traffic to calculator."
     }
   ]
 }

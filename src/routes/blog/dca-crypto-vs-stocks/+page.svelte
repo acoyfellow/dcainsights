@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Calendar, Clock, Share2, ArrowLeft } from 'lucide-svelte';
+  import ShareButtons from '$lib/components/ShareButtons.svelte';
 
   const post = {
     title: 'DCA Crypto vs. Stocks: Which Returns More?',

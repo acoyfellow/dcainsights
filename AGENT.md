@@ -21,10 +21,12 @@ Otherwise: keep shipping.
 
 ## What to ship (priority order)
 
-1) **SEO traffic** (more keywords, more traffic, more revenue, frequent homepage updates, NEVER publish broken links, always update the blog, always update the sitemap, rss feed, etc.)
+1) **SEO traffic** (more keywords, more content, NEVER publish broken links, always update blog + sitemap + rss)
 2) **Better tools** (more useful + faster + shareable)
 3) **Monetization** (conversion lifts, paid exports, paid reports, subscriptions)
-4) **Distribution** (X, partnerships, affiliates, sponsorships)
+4) **Quality assurance** (link testing, E2E tests, bug fixes)
+
+**NOT agent focus:** Distribution, social media, sharing mechanisms (human handles these)
 
 ---
 
