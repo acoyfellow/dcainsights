@@ -1,0 +1,74 @@
+{
+  "branchName": "ralph/monetization",
+  "userStories": [
+    {
+      "id": "REV-001",
+      "title": "Create Stripe Products for DCA Insights (Pro $297/yr, Premium $597/yr)",
+      "priority": 1,
+      "passes": true
+    },
+    {
+      "id": "REV-002",
+      "title": "Wire Stripe Products to Pricing Page",
+      "priority": 2,
+      "passes": true
+    },
+    {
+      "id": "REV-003",
+      "title": "Add User Tier Enforcement to Protected Features",
+      "priority": 3,
+      "passes": true
+    },
+    {
+      "id": "REV-004",
+      "title": "Implement Conversion Tracking Dashboard",
+      "priority": 4,
+      "passes": true
+    },
+    {
+      "id": "QA-001",
+      "title": "Link Validation and E2E Test Suite",
+      "priority": 5,
+      "passes": true
+    },
+    {
+      "id": "SEO-001",
+      "title": "Add Retirement DCA Blog Post + High-Value SEO Content",
+      "priority": 6,
+      "passes": true
+    },
+    {
+      "id": "SEO-002",
+      "title": "Add Best S&P 500 Index Funds Blog Post for DCA",
+      "priority": 7,
+      "passes": true
+    },
+    {
+      "id": "SEO-003",
+      "title": "Add How Much to Invest Monthly Blog Post",
+      "priority": 8,
+      "passes": true
+    },
+    {
+      "id": "SEO-004",
+      "title": "Add DCA for Beginners Complete Guide",
+      "priority": 9,
+      "passes": true
+    },
+    {
+      "id": "SEO-005",
+      "title": "Add Compound Interest with DCA Calculator Blog Post",
+      "priority": 10,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: compound-interest-dca-calculator (2500+ words)",
+        "Targets: compound interest calculator, DCA compound growth, investment growth calculator",
+        "Visual compound growth examples",
+        "Interactive projection examples",
+        "Internal links to tools",
+        "Added to sitemap",
+        "bun tsc passes"
+      ]
+    }
+  ]
+}

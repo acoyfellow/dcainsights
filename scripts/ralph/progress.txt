@@ -1,0 +1,19 @@
+## Codebase Patterns
+- Blog posts: src/routes/blog/{slug}/+page.svelte with script, svelte:head, main, article structure
+- Use Lucide icons, Tailwind CSS, Svelte 5 $state/$derived for interactivity
+- Sitemap: src/routes/sitemap.xml/+server.ts - add new routes to routes array
+- Blog index: src/routes/blog/+page.svelte - add posts to posts array
+- Build: ~/.bun/bin/bun tsc && ~/.bun/bin/bun run build
+- Keep blog posts focused, use interactive elements (calculators, tables) for engagement
+
+---
+
+## 2026-02-03 - SEO-004
+- Implemented: DCA for Beginners Complete Guide
+- Files: src/routes/blog/dca-for-beginners-complete-guide/+page.svelte
+- Features: Interactive growth calculator, 5-step guide, broker comparison table, FAQ section
+- **Learnings:**
+  - Previous session had token limit issues - keep content modular
+  - Blog posts can have interactive Svelte components inline
+  - Broker comparison tables drive engagement
+---
