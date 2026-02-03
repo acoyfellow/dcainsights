@@ -1,7 +1,15 @@
 {
-  "lastUpdated": "2026-02-03T11:57:00+00:00",
-  "currentStory": "STOP",
-  "status": "BLOCKED",
-  "checkpoint": "TOKEN LIMIT ISSUES - Do NOT write long blog posts",
-  "directive": "SMALL TASKS ONLY: Fix bugs, add tests, short edits. No new 2000+ word content."
+  "lastUpdated": "2026-02-03T12:00:00+00:00",
+  "mode": "SINGLE_WORKER_LOCKED",
+  "currentStory": "QA-AUDIT",
+  "status": "IN_PROGRESS",
+  "directive": "NO NEW CONTENT. Fix what exists: test all pages, find broken things, fix hallucinations, verify builds pass.",
+  "tasks": [
+    "1. bun run check - must be 0 errors",
+    "2. bun build - must pass",
+    "3. Test every route returns 200",
+    "4. Check all internal links work",
+    "5. Verify calculator tools function",
+    "6. Find/fix any hallucinated content"
+  ]
 }
