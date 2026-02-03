@@ -131,3 +131,26 @@
 - Blog post already existed from auto-rescue but was under 2500 words
 - Dev server issues with wrangler - use `bun run build` to verify instead
 - Build is the source of truth for code validity
+
+## 2026-02-03 - QA-001
+
+**What was implemented**
+- Comprehensive E2E test suite for DCAinsights.com (62 tests)
+- Sitemap URL validation (all 19 URLs tested)
+- Calculator tools E2E tests (5 tools validated)
+- API endpoint tests (newsletter, DCA calculate)
+- Checkout flow validation (Stripe endpoints exist)
+- Share link creation/loading tests
+- Blog content page tests (all 7 posts)
+- Image/asset validation (no broken images)
+- Navigation/internal link tests
+
+**Files changed**
+- scripts/test-e2e.sh (enhanced from basic to comprehensive)
+
+**Learnings**
+- SvelteKit with Cloudflare adapter: pages load dynamically via JS, can't test rendered content with curl
+- API tests need correct parameters (e.g., DCA calculate needs ?amount=500)
+- Test "endpoint exists" rather than "returns 200" for Stripe (may return 500 without valid Stripe keys)
+- Use production URL for E2E tests when local dev is complex
+- `set +e` in bash scripts when using `(())` arithmetic that may equal 0
