@@ -75,6 +75,12 @@ const routes = [
     description: 'DCA Crypto vs Stocks: Which Returns More?'
   },
   {
+    url: '/blog/how-much-to-invest-monthly-dca-guide',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'How Much Should You Invest Monthly? Complete DCA Amount Guide with Calculator'
+  },
+  {
     url: '/blog/best-sp500-index-funds-for-dca',
     changeFreq: 'monthly',
     priority: '0.7',

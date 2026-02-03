@@ -3,6 +3,16 @@
   
   const posts = [
     {
+      slug: 'how-much-to-invest-monthly-dca-guide',
+      title: 'How Much Should You Invest Monthly? The Complete DCA Amount Guide',
+      excerpt: 'A data-driven guide to determining your optimal monthly investment amount for dollar cost averaging. Includes calculators, examples, and strategies for every income level.',
+      date: '2026-02-03',
+      readTime: '12 min read',
+      category: 'Guide',
+      featured: true,
+      image: '/og.png'
+    },
+    {
       slug: 'best-sp500-index-funds-for-dca',
       title: 'Best S&P 500 Index Funds for DCA in 2026: VOO vs SPY vs IVV',
       excerpt: 'Compare the top low-cost S&P 500 index funds for dollar cost averaging. Detailed analysis of expense ratios, tracking error, and which fund is best for your DCA strategy.',
