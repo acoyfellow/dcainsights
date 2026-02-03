@@ -133,27 +133,38 @@ Without KV, share links use in-memory storage (works within single deployment in
 
 ## Iteration checklist (do in order)
 
-1) Read `scripts/ralph/prd.json`
-2) Read `scripts/ralph/progress.txt` (Codebase Patterns first)
-3) Confirm correct branch:
-   - use `prd.json.branchName`
-4) Pick the ONE story with the lowest `priority` where `passes:false`
-5) Implement ONLY that story
-6) Run checks:
-   - `bun tsc`
-   - `bun run build`
-   - Start dev server: `npx wrangler dev -- bun dev`
-   - Run E2E tests: `bash scripts/test-e2e.sh`
-   - Fix any failures before proceeding
-7) Update memory:
-   - Append learnings to `scripts/ralph/progress.txt`
-   - Append decisions/strategy to `@CHANGELOG.md`
-   - Update nearest `@AGENT.md` only with reusable patterns/gotchas
-8) Commit (green only):
-   - `feat|fix|chore: [ID] - [Title]`
-9) Update `scripts/ralph/prd.json`:
-   - set story `passes:true`
-10) Push
+### 0) HANDOFF CHECK (REQUIRED FIRST)
+```bash
+# Check state and pick up where last worker left off
+cat scripts/ralph/state.json
+git log --oneline -3
+git status --short
+```
+If `state.json` shows `status: "in_progress"`, CONTINUE that story.
+If truncation occurred (check last conversation), resume from checkpoint.
+
+### 1) Claim work
+```bash
+# Update state.json with your work
+echo '{"lastUpdated":"'$(date -Iseconds)'","currentStory":"STORY-ID","status":"in_progress","checkpoint":"starting"}' > scripts/ralph/state.json
+```
+
+2) Read `scripts/ralph/prd.json`
+3) Read `scripts/ralph/progress.txt` (Codebase Patterns first)
+4) Pick the ONE story with the lowest `priority` where `passes:false` (or continue in-progress)
+5) Implement ONLY that story - keep responses SHORT to avoid truncation
+6) Run checks: `bun tsc && bun run build`
+7) Update checkpoint frequently:
+```bash
+echo '{"lastUpdated":"'$(date -Iseconds)'","currentStory":"STORY-ID","status":"in_progress","checkpoint":"description of where you are"}' > scripts/ralph/state.json
+```
+8) Commit (green only): `feat|fix|chore: [ID] - [Title]`
+9) Update `scripts/ralph/prd.json`: set story `passes:true`
+10) Mark complete:
+```bash
+echo '{"lastUpdated":"'$(date -Iseconds)'","currentStory":null,"status":"idle","checkpoint":null}' > scripts/ralph/state.json
+```
+11) Push all changes including state.json
 
 ---
 
