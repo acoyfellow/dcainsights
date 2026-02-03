@@ -1,6 +1,6 @@
 <script lang="ts">
   import { ExternalLink, Copy, Check, DollarSign, TrendingUp } from 'lucide-svelte';
-  import type { AffiliatePartner } from '$lib/server/affiliate';
+  import type { AffiliatePartner } from '$lib/types';
   
   let { 
     partner,

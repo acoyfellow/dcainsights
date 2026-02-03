@@ -116,6 +116,10 @@
           oneYearValue: valueAfterOneYear.toFixed(2),
           oneYearReturn: returnAfterOneYear.toFixed(2),
           date: oneYearData.date,
+          twoYearPrice: '',
+          twoYearValue: '',
+          twoYearReturn: '',
+          twoYearDate: '',
         };
       }
 
@@ -142,7 +146,7 @@
 
     // Get recession statistics
     const recessionStats = data.recessionStats.find(
-      (r) => r.name === selectedRecession
+      (r: any) => r.name === selectedRecession
     );
 
     return {
@@ -398,26 +402,27 @@
                 </tr>
               </thead>
               <tbody class="divide-y divide-gray-100">
-                {#each data.recessionStats as stat}
+                {#each data.recessionStats as stat (stat?.name)}
+                  {@const s = stat!}
                   <tr class="hover:bg-gray-50">
-                    <td class="py-2 font-medium">{stat.name}</td>
-                    <td class="py-2 text-right font-mono">${stat.startPrice}</td
+                    <td class="py-2 font-medium">{s.name}</td>
+                    <td class="py-2 text-right font-mono">${s.startPrice}</td
                     >
-                    <td class="py-2 text-right font-mono">${stat.endPrice}</td>
+                    <td class="py-2 text-right font-mono">${s.endPrice}</td>
                     <td
                       class="py-2 text-right font-mono {parseFloat(
-                        stat.priceChange
+                        s.priceChange
                       ) >= 0
                         ? 'text-green-600'
                         : 'text-red-600'}"
                     >
-                      {parseFloat(stat.priceChange) >= 0
+                      {parseFloat(s.priceChange) >= 0
                         ? "+"
-                        : ""}{stat.priceChange}%
+                        : ""}{s.priceChange}%
                     </td>
-                    <td class="py-2 text-right font-mono">${stat.minPrice}</td>
+                    <td class="py-2 text-right font-mono">${s.minPrice}</td>
                     <td class="py-2 text-right font-mono text-red-600"
-                      >-{stat.maxDrawdown}%</td
+                      >-{s.maxDrawdown}%</td
                     >
                   </tr>
                 {/each}

@@ -20,7 +20,7 @@
   });
 
   function getLink(partnerId: string): string {
-    const partner = data.partners.find(p => p.id === partnerId);
+    const partner = data.partners.find((p: AffiliatePartner) => p.id === partnerId);
     if (!partner) return '';
 
     const baseUrl = partner.url;

@@ -15,8 +15,18 @@
   import { isPro } from "$lib/stores/user";
   import { startOfMonth, startOfWeek, startOfYear } from "date-fns";
 
+  type Interval = 'daily' | 'weekly' | 'monthly' | 'annually';
+  type TableRow = {
+    date: string;
+    value: string;
+    invested: number;
+    shares: string;
+    totalShares: string;
+    avgCost: string;
+  };
+
   let { data } = $props();
-  let investmentAmount = $state(page.url.searchParams.get("amount") || 100);
+  let investmentAmount = $state<number>(Number(page.url.searchParams.get("amount")) || 100);
   let selectedInterval = $state<Interval>(
     (page.url.searchParams.get("interval") as Interval) || "monthly",
   );
@@ -27,9 +37,9 @@
     end: "",
   });
 
-  let tableData = $derived.by(() => {
+  let tableData = $derived.by((): TableRow[] => {
     // Group data by interval
-    const groupedData = data.parsedData.reduce((acc, item) => {
+    const groupedData = data.parsedData.reduce((acc: Record<string, any>, item: any) => {
       const date = new Date(item.date);
       let key;
 
@@ -53,10 +63,10 @@
       return acc;
     }, {});
 
-    const filteredData = Object.values(groupedData);
+    const filteredData: any[] = Object.values(groupedData);
 
     let runningShares = 0;
-    return filteredData.map((item, index) => {
+    return filteredData.map((item: any, index: number) => {
       const shares = investmentAmount / Number(item.value);
       runningShares += shares;
       const invested = (index + 1) * investmentAmount;
@@ -76,7 +86,7 @@
     if (!sortColumn) return [...tableData];
     const multiplier = sortDirection === "asc" ? 1 : -1;
     return [...tableData].sort(
-      (a, b) => multiplier * (a[sortColumn] > b[sortColumn] ? 1 : -1),
+      (a, b) => multiplier * ((a as any)[sortColumn] > (b as any)[sortColumn] ? 1 : -1),
     );
   });
 
@@ -85,9 +95,9 @@
       const lastEntry = tableData.at(-1);
       return {
         invested: lastEntry?.invested ?? 0,
-        totalShares: Number(lastEntry?.totalShares) ?? 0,
+        totalShares: Number(lastEntry?.totalShares) || 0,
         currentValue:
-          Number(lastEntry?.totalShares) * Number(lastEntry?.value) ?? 0,
+          (Number(lastEntry?.totalShares) * Number(lastEntry?.value)) || 0,
       };
     }
 
@@ -121,7 +131,7 @@
         throw new Error("Failed to save report");
       }
 
-      const result = await response.json();
+      const result = await response.json() as { id: string };
       
       // Use the report ID for the shareable URL
       const url = `${page.url.origin}${page.url.pathname}?report=${result.id}`;
@@ -152,7 +162,7 @@
         throw new Error("Failed to load report");
       }
 
-      const result = await response.json();
+      const result = await response.json() as { data: { a?: number; i?: string; s?: string; d?: string } };
       const scenario = result.data;
 
       investmentAmount = scenario.a || 100;
@@ -170,7 +180,7 @@
   let reportLoadedMessage = $derived.by(() => {
     if (!page.url.searchParams.get("report")) return false;
     if (reportLoaded) return true;
-    reportLoaded = loadReportFromUrl();
+    loadReportFromUrl().then(loaded => { reportLoaded = loaded; });
     return reportLoaded;
   });
 
@@ -201,7 +211,7 @@
         }),
       });
 
-      const result = await response.json();
+      const result = await response.json() as { success: boolean; message?: string };
 
       if (result.success) {
         emailSubscribed = true;
@@ -221,7 +231,7 @@
     }
   }
 
-  function toggleSort(column) {
+  function toggleSort(column: string) {
     if (sortColumn === column) {
       sortDirection = sortDirection === "asc" ? "desc" : "asc";
     } else {

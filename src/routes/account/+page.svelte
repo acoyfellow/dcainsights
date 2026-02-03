@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from '$app/state';
   import { userStore } from '$lib/stores/user';
+  import { get } from 'svelte/store';
   import { onMount } from 'svelte';
   import { Settings, CreditCard, LogOut, User, Crown, Zap } from 'lucide-svelte';
   
@@ -45,11 +46,11 @@
       const response = await fetch('/api/stripe/portal', {
         method: 'POST',
         headers: { 
-          'Authorization': `Bearer ${userStore.get()?.user}` 
+          'Authorization': `Bearer ${get(userStore)?.user}` 
         }
       });
       
-      const { url } = await response.json();
+      const { url } = await response.json() as { url: string };
       if (url) {
         window.location.href = url;
       }
@@ -169,12 +170,12 @@
         <div class="space-y-4">
           <div class="flex justify-between py-2 border-b border-gray-100">
             <span class="text-gray-600">Email</span>
-            <span class="font-medium">{userStore.get()?.user?.email || 'Not signed in'}</span>
+            <span class="font-medium">{get(userStore)?.user?.email || 'Not signed in'}</span>
           </div>
           
           <div class="flex justify-between py-2 border-b border-gray-100">
             <span class="text-gray-600">Account Type</span>
-            <span class="font-medium capitalize">{userStore.get()?.user?.tier || 'Free'}</span>
+            <span class="font-medium capitalize">{get(userStore)?.user?.tier || 'Free'}</span>
           </div>
         </div>
       </div>

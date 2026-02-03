@@ -20,7 +20,7 @@
     // Fetch events from API (in production, this would aggregate KV data)
     try {
       const response = await fetch('/api/events?type=view_tool&limit=100');
-      const data = await response.json();
+      const data = await response.json() as { events?: { type: string }[] };
       
       // Calculate stats from events
       const eventCounts = new Map<string, number>();

@@ -31,7 +31,7 @@
     </button>
 
     <button
-      onclick={() => location.reload(true)}
+      onclick={() => location.reload()}
       class="inline-flex items-center justify-center gap-2 px-6 py-3 text-base font-medium bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-lg cursor-pointer"
     >
       <RefreshCcw class="w-4 h-4" />

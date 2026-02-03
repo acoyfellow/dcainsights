@@ -26,7 +26,7 @@
         body: JSON.stringify({ planId, billingInterval })
       });
       
-      const { url } = await response.json();
+      const { url } = await response.json() as { url: string };
       if (url) {
         window.location.href = url;
       }

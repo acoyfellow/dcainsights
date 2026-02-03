@@ -27,7 +27,7 @@
         body: JSON.stringify({ email, name })
       });
       
-      const data = await response.json();
+      const data = await response.json() as { error?: string; token?: string };
       
       if (!response.ok) {
         throw new Error(data.error || 'Failed to create account');

@@ -13,7 +13,7 @@
     try {
       const response = await fetch('/api/newsletter/status');
       if (response.ok) {
-        const data = await response.json();
+        const data = await response.json() as { subscribed: boolean };
         subscribed = data.subscribed;
       }
     } catch {

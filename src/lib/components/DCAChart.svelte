@@ -4,7 +4,7 @@
 
   let { data, investmentAmount, onRangeSelect } = $props<{
     data: any[];
-    investmentAmount: string;
+    investmentAmount: string | number;
     onRangeSelect: (range: { start: string; end: string }) => void;
   }>();
   let chartEl: HTMLDivElement;
@@ -67,9 +67,9 @@
       ],
       hooks: {
         setScale: [
-          (u) => {
-            const start = new Date(u.scales.x.min * 1000).toLocaleDateString();
-            const end = new Date(u.scales.x.max * 1000).toLocaleDateString();
+          (u: uPlot) => {
+            const start = new Date((u.scales.x.min ?? 0) * 1000).toLocaleDateString();
+            const end = new Date((u.scales.x.max ?? 0) * 1000).toLocaleDateString();
             console.log("Scale/Zoom changed:", { start, end });
             onRangeSelect?.({ start, end });
           },
@@ -77,16 +77,17 @@
       },
     };
 
-    const chartData = [
-      data.map((d) => (d?.date ? new Date(d.date).getTime() / 1000 : null)),
-      data.map((d) => {
+    const chartData: (number | null)[][] = [
+      data.map((d: any) => (d?.date ? new Date(d.date).getTime() / 1000 : null)),
+      data.map((d: any) => {
         if (!d?.totalShares || !d?.value) return null;
         return Number(d.totalShares) * Number(d.value);
       }),
-      data.map((d) => d?.invested ?? null),
+      data.map((d: any) => d?.invested ?? null),
     ];
 
     if (plot) plot.destroy();
+    // @ts-ignore - uPlot types are complex
     plot = new uPlot(opts, chartData, chartEl);
 
     const resizeObserver = new ResizeObserver(() => {

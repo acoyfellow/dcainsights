@@ -149,7 +149,7 @@
         body: JSON.stringify({ email: emailInput, tier: "free" }),
       });
 
-      const result = await response.json();
+      const result = await response.json() as { success: boolean; message?: string };
 
       if (result.success) {
         emailSubscribed = true;

@@ -3,6 +3,19 @@
   import { Share } from "lucide-svelte";
   import { addToast } from "$lib/state.svelte";
 
+  interface DayResult {
+    day?: number;
+    dayOfWeek?: number;
+    dayName?: string;
+    totalShares: string;
+    totalInvested: number;
+    avgCost: string;
+    finalValue: string;
+    totalReturn: string;
+    annualizedReturn: string;
+    investmentCount: number;
+  }
+
   let { data } = $props();
 
   // Analysis results
@@ -49,7 +62,7 @@
         annualizedReturn: (annualizedReturn * 100).toFixed(2),
         investmentCount,
       };
-    }).filter(Boolean);
+    }).filter((x): x is NonNullable<typeof x> => x !== null) as DayResult[];
 
     // Day of Week Analysis (0=Sunday, 1=Monday, etc.)
     const dayNames = [
@@ -98,38 +111,38 @@
         annualizedReturn: (annualizedReturn * 100).toFixed(2),
         investmentCount,
       };
-    }).filter(Boolean);
+    }).filter((x): x is NonNullable<typeof x> => x !== null) as DayResult[];
 
     // Find optimal days
-    const bestDayOfMonth = dayOfMonthResults.reduce((best, current) =>
+    const bestDayOfMonth = dayOfMonthResults.reduce((best: DayResult, current: DayResult) =>
       parseFloat(current.totalReturn) > parseFloat(best.totalReturn)
         ? current
         : best
     );
 
-    const worstDayOfMonth = dayOfMonthResults.reduce((worst, current) =>
+    const worstDayOfMonth = dayOfMonthResults.reduce((worst: DayResult, current: DayResult) =>
       parseFloat(current.totalReturn) < parseFloat(worst.totalReturn)
         ? current
         : worst
     );
 
-    const bestDayOfWeek = dayOfWeekResults.reduce((best, current) =>
+    const bestDayOfWeek = dayOfWeekResults.reduce((best: DayResult, current: DayResult) =>
       parseFloat(current.totalReturn) > parseFloat(best.totalReturn)
         ? current
         : best
     );
 
-    const worstDayOfWeek = dayOfWeekResults.reduce((worst, current) =>
+    const worstDayOfWeek = dayOfWeekResults.reduce((worst: DayResult, current: DayResult) =>
       parseFloat(current.totalReturn) < parseFloat(worst.totalReturn)
         ? current
         : worst
     );
 
     // Calculate statistics
-    const monthlyReturns = dayOfMonthResults.map((d) =>
+    const monthlyReturns = dayOfMonthResults.map((d: DayResult) =>
       parseFloat(d.totalReturn)
     );
-    const weeklyReturns = dayOfWeekResults.map((d) =>
+    const weeklyReturns = dayOfWeekResults.map((d: DayResult) =>
       parseFloat(d.totalReturn)
     );
 
@@ -151,10 +164,10 @@
 
     return {
       dayOfMonthResults: dayOfMonthResults.sort(
-        (a, b) => parseFloat(b.totalReturn) - parseFloat(a.totalReturn)
+        (a: DayResult, b: DayResult) => parseFloat(b.totalReturn) - parseFloat(a.totalReturn)
       ),
       dayOfWeekResults: dayOfWeekResults.sort(
-        (a, b) => parseFloat(b.totalReturn) - parseFloat(a.totalReturn)
+        (a: DayResult, b: DayResult) => parseFloat(b.totalReturn) - parseFloat(a.totalReturn)
       ),
       bestDayOfMonth,
       worstDayOfMonth,
