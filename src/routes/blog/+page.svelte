@@ -3,6 +3,16 @@
   
   const posts = [
     {
+      slug: 'best-sp500-index-funds-for-dca',
+      title: 'Best S&P 500 Index Funds for DCA in 2026: VOO vs SPY vs IVV',
+      excerpt: 'Compare the top low-cost S&P 500 index funds for dollar cost averaging. Detailed analysis of expense ratios, tracking error, and which fund is best for your DCA strategy.',
+      date: '2026-02-03',
+      readTime: '12 min read',
+      category: 'Index Funds',
+      featured: true,
+      image: '/og.png'
+    },
+    {
       slug: 'how-to-build-retirement-wealth-with-dca',
       title: 'How to Build Retirement Wealth with Dollar Cost Averaging',
       excerpt: 'A comprehensive guide to using DCA in your 401(k), IRA, and brokerage accounts to build lasting retirement wealth.',

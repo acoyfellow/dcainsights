@@ -75,6 +75,12 @@ const routes = [
     description: 'DCA Crypto vs Stocks: Which Returns More?'
   },
   {
+    url: '/blog/best-sp500-index-funds-for-dca',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'Best S&P 500 Index Funds for DCA: VOO vs SPY vs IVV Comparison'
+  },
+  {
     url: '/blog/how-to-build-retirement-wealth-with-dca',
     changeFreq: 'monthly',
     priority: '0.7',
