@@ -3,6 +3,15 @@
   
   const posts = [
     {
+      slug: 'dca-for-beginners-complete-guide',
+      title: 'DCA for Beginners: The Complete Guide to Dollar Cost Averaging',
+      excerpt: 'Learn how to start dollar cost averaging from scratch. This step-by-step guide covers everything beginners need to know about automated investing.',
+      date: '2026-02-03',
+      readTime: '15 min read',
+      category: 'Beginner Guide',
+      featured: true
+    },
+    {
       slug: 'how-much-to-invest-monthly-dca-guide',
       title: 'How Much Should You Invest Monthly? The Complete DCA Amount Guide',
       excerpt: 'A data-driven guide to determining your optimal monthly investment amount for dollar cost averaging. Includes calculators, examples, and strategies for every income level.',

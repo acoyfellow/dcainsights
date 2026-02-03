@@ -93,6 +93,12 @@ const routes = [
     description: 'How to Build Retirement Wealth with Dollar Cost Averaging'
   },
   {
+    url: '/blog/dca-for-beginners-complete-guide',
+    changeFreq: 'monthly',
+    priority: '0.7',
+    description: 'DCA for Beginners: Complete Guide to Dollar Cost Averaging'
+  },
+  {
     url: '/about',
     changeFreq: 'monthly',
     priority: '0.6',
