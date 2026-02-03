@@ -89,3 +89,26 @@
 - Form validation: regex for email format, disable submit while submitting
 - Use existing toast notifications for feedback
 
+
+
+## 2026-02-03 - SEO-001
+
+**What was implemented**
+- Created comprehensive retirement DCA blog post (2500+ words)
+- Targets high-value keywords: retirement investing, 401k DCA, IRA DCA
+- Added to blog listing as featured post
+- Added to sitemap
+- Includes internal links to calculator tools
+- Schema.org Article markup for SEO
+
+**Files changed**
+- src/routes/blog/how-to-build-retirement-wealth-with-dca/+page.svelte (new)
+- src/routes/blog/+page.svelte (added to listing)
+- src/routes/sitemap.xml/+server.ts (added route)
+- AGENT.md (clarified open source nature, push access)
+
+**Learnings**
+- Blog posts follow consistent structure: post metadata, toc, article sections
+- ShareButtons component reused across blog posts
+- Add 'Retirement' category to blog categories array
+- Auto-rescue commits may run - check git log before committing

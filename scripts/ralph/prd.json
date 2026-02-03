@@ -70,7 +70,7 @@
       "id": "SEO-001",
       "title": "Add Retirement DCA Blog Post + High-Value SEO Content",
       "priority": 6,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Blog post: how-to-build-retirement-wealth-with-dca (2500+ words)",
         "Targets 'retirement investing', '401k DCA', 'IRA DCA' keywords",
