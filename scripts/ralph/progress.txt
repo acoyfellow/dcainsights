@@ -154,3 +154,12 @@
 - Test "endpoint exists" rather than "returns 200" for Stripe (may return 500 without valid Stripe keys)
 - Use production URL for E2E tests when local dev is complex
 - `set +e` in bash scripts when using `(())` arithmetic that may equal 0
+
+## 2026-02-03 - SEO-002
+- Implemented: Best S&P 500 Index Funds for DCA blog post (2500+ words)
+- Files: src/routes/blog/best-sp500-index-funds-for-dca/+page.svelte, blog index, sitemap
+- **Learnings:**
+  - Use comparison tables for fund comparisons (expense ratios, AUM, etc.)
+  - CTAs to calculator tools drive traffic between pages
+  - Keywords: "best S&P 500 index fund", "VOO vs SPY vs IVV", "low cost index funds"
+---

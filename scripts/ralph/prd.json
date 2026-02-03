@@ -86,7 +86,7 @@
       "id": "SEO-002",
       "title": "Add Best S&P 500 Index Funds Blog Post for DCA",
       "priority": 7,
-      "passes": false,
+      "passes": true,
       "acceptanceCriteria": [
         "Blog post: best-sp500-index-funds-for-dca (2500+ words)",
         "Targets 'best S&P 500 index fund', 'VOO vs SPY vs IVV', 'low cost index funds' keywords",
