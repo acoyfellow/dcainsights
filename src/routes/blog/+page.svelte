@@ -43,7 +43,7 @@
       image: '/og.png'
     },
     {
-      slug: 'best-days-to-invest-dca',
+      slug: 'best-days-to-invest',
       title: 'Best Days to Invest: Does Timing Matter?',
       excerpt: 'Analyzing 10 years of data to find optimal DCA timing patterns.',
       date: '2025-12-28',
