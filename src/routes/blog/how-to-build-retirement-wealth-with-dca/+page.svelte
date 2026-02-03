@@ -360,6 +360,66 @@
       </p>
     </section>
 
+    <section id="fire-movement">
+      <h2>DCA for FIRE (Financial Independence, Retire Early)</h2>
+      <p>
+        The FIRE movement has popularized aggressive saving and early retirement. Here's how DCA powers this approach:
+      </p>
+      
+      <h3>The FIRE Savings Rate</h3>
+      <p>
+        Traditional retirement planning assumes 10-15% savings rates. FIRE practitioners often save 50-70% of income:
+      </p>
+      <ul>
+        <li><strong>10% savings rate:</strong> ~40 years to retirement</li>
+        <li><strong>25% savings rate:</strong> ~32 years to retirement</li>
+        <li><strong>50% savings rate:</strong> ~17 years to retirement</li>
+        <li><strong>70% savings rate:</strong> ~8.5 years to retirement</li>
+      </ul>
+      <p>
+        DCA enables these aggressive rates by turning saving into an automatic habit rather than a monthly decision.
+      </p>
+      
+      <h3>The Account Priority for Early Retirement</h3>
+      <p>
+        FIRE seekers need money accessible before age 59.5. The optimal DCA priority:
+      </p>
+      <ol>
+        <li><strong>401(k) to employer match:</strong> Free money always comes first</li>
+        <li><strong>HSA (if eligible):</strong> Triple tax advantage, becomes retirement account at 65</li>
+        <li><strong>Roth IRA:</strong> Contributions (not gains) withdrawable anytime penalty-free</li>
+        <li><strong>401(k) to max:</strong> Use Roth conversion ladder or Rule 72(t) for early access</li>
+        <li><strong>Taxable brokerage:</strong> Fully accessible, preferential capital gains treatment</li>
+      </ol>
+      
+      <h3>The Roth Conversion Ladder</h3>
+      <p>
+        FIRE retirees access 401(k) funds early using this strategy:
+      </p>
+      <ol>
+        <li>In early retirement, convert Traditional 401(k)/IRA to Roth each year</li>
+        <li>Pay taxes on conversion (keep in low brackets)</li>
+        <li>After 5 years, converted amounts are withdrawable penalty-free</li>
+        <li>Build a 5-year "ladder" of accessible funds</li>
+      </ol>
+      <p>
+        This requires 5 years of living expenses in taxable accounts to bridge the gap, which is why FIRE practitioners DCA into multiple account types simultaneously.
+      </p>
+      
+      <h3>Coast FIRE: DCA Then Stop</h3>
+      <p>
+        An alternative FIRE strategy is "Coast FIRE"—DCA aggressively early, then let compounding do the work:
+      </p>
+      <ul>
+        <li>Age 25-35: Max all retirement accounts ($30,500+/year)</li>
+        <li>Age 35+: Contributions can stop—existing balance grows to $1M+ by 65</li>
+        <li>Work optional or part-time jobs without needing to save</li>
+      </ul>
+      <p>
+        $150,000 invested by age 35, left to compound at 10% for 30 years = <strong>$2.6 million</strong> at 65.
+      </p>
+    </section>
+
     <section id="retirement-calculator">
       <h2>Calculate Your Retirement DCA</h2>
       <p>
