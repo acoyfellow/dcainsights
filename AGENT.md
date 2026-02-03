@@ -1,67 +1,89 @@
-# DCA Insights - Agent Guide
+# DCA Insights - Orchestrator Guide
 
-Open source at github.com/acoyfellow/dcainsights. Work in public, positive, legal.
+**Scope:** 1000 iterations toward $1M MRR
+**Mode:** Single worker, QA-first, product quality focus
 
-## What This Is
+## North Star
 
-DCA Insights (dcainsights.com) - Educational tools and content for Dollar Cost Averaging investors.
+$1M MRR with ≥90% profit margin, legally, via Production Stripe for dcainsights.com.
 
-**Stack:** SvelteKit, Tailwind, Cloudflare Pages, Stripe
+## Current Priority: PRODUCT AUDIT
 
-## What We Sell
+We sell courses and tools. If they don't work, the business is trash.
 
-| Tier | Price | Features |
-|------|-------|----------|
-| Free | $0 | Basic calculators, historical data |
-| Pro | $9.99/mo | Advanced analytics, CSV export, ad-free |
-| Premium | $29.99/mo | All Pro + courses, API, backtesting |
+### What We Sell
 
-**Courses (Premium):**
-- DCA Masterclass (2.5hrs, 12 lessons)
-- Bear Market Survival (1.5hrs, 8 lessons)  
-- Tax-Optimized DCA (45min, 5 lessons)
+| Tier | Price | Status |
+|------|-------|--------|
+| Free | $0 | ✅ Calculators work |
+| Pro | $9.99/mo | ⚠️ Need to verify Stripe |
+| Premium | $29.99/mo | ❌ Courses are FAKE |
 
-## Current State (QA NEEDED)
+### Courses (CRITICAL - Currently Broken)
 
-⚠️ **Known issues to fix:**
-- Course videos are PLACEHOLDERS (just alert boxes)
-- Need to verify all Stripe price IDs are real
-- 23 svelte-check warnings
-- Pre-push hook exists but disabled
+| Course | Tier | Status |
+|--------|------|--------|
+| DCA Masterclass (2.5hrs) | Pro | ❌ PLACEHOLDER - alert() only |
+| Bear Market Survival (1.5hrs) | Premium | ❌ PLACEHOLDER |
+| Tax-Optimized DCA (45min) | Premium | ❌ PLACEHOLDER |
+| Portfolio Guide PDF | Free | ⚠️ Exists but verify content |
 
-## Tools We Have
+## Audit Checklist (Do First)
 
-- `/sp500-dca-calculator` - Main calculator
-- `/dca-vs-lump-sum` - Comparison tool
-- `/dca-timing-optimizer` - Best day to invest
-- `/bear-market-dca` - Bear market analysis
-- `/recession-dca` - Recession analysis
-- `/blog` - SEO content
-- `/education` - Courses (needs real content)
-- `/pricing` - Subscription plans
+### Phase 1: Payment Flow
+- [ ] Verify Stripe price IDs are real (not placeholder strings)
+- [ ] Test checkout flow end-to-end
+- [ ] Verify webhook updates user tier
+- [ ] Test subscription cancellation
+
+### Phase 2: Pro Features
+- [ ] CSV export actually works
+- [ ] PDF export actually works
+- [ ] Advanced analytics dashboard exists and functions
+
+### Phase 3: Premium Features (Courses)
+- [ ] Either BUILD real course content OR
+- [ ] REMOVE fake courses from product
+- [ ] Don't sell what doesn't exist
+
+### Phase 4: All Tools
+- [ ] /sp500-dca-calculator - full test
+- [ ] /dca-vs-lump-sum - full test
+- [ ] /dca-timing-optimizer - full test
+- [ ] /bear-market-dca - full test
+- [ ] /recession-dca - full test
+
+### Phase 5: Content
+- [ ] All blog posts render (no 500s)
+- [ ] All internal links work
+- [ ] Sitemap accurate
+
+## Stack
+
+SvelteKit, Tailwind, Cloudflare Pages, Stripe
 
 ## Before Any Push
 
 ```bash
 export PATH="$HOME/.bun/bin:$PATH"
 bun tsc          # Must pass
-bun run check    # Must be 0 errors
+bun run check    # 0 errors required
 bun run build    # Must succeed
 ```
 
-## Priorities
+## Secrets (in .env, never commit)
 
-1. **Make existing features WORK** - No fake placeholders
-2. **QA everything** - Test all links, forms, payments
-3. **Fix bugs** - Resolve warnings, broken paths
-4. **Then** new content
-
-## Secrets
-
-Live in `.env` (never commit):
 - STRIPE_SECRET_KEY / STRIPE_PUBLISHABLE_KEY
 - CLOUDFLARE_API_TOKEN / CLOUDFLARE_ACCOUNT_ID
 
 ## Deploy
 
 Push to `main` → Cloudflare auto-deploys
+
+## Rules
+
+1. One task at a time
+2. Verify before commit
+3. Don't sell fake products
+4. Keep responses SHORT (avoid token truncation)
+5. Update this file with progress
