@@ -59,15 +59,51 @@
       "id": "SEO-005",
       "title": "Add Compound Interest with DCA Calculator Blog Post",
       "priority": 10,
-      "passes": true,
+      "passes": true
+    },
+    {
+      "id": "SEO-006",
+      "title": "Add DCA vs Market Timing Blog Post",
+      "priority": 11,
+      "passes": false,
       "acceptanceCriteria": [
-        "Blog post: compound-interest-dca-calculator (2500+ words)",
-        "Targets: compound interest calculator, DCA compound growth, investment growth calculator",
-        "Visual compound growth examples",
-        "Interactive projection examples",
+        "Blog post: dca-vs-market-timing (2500+ words)",
+        "Targets: DCA vs timing the market, market timing vs dollar cost averaging",
+        "Historical data showing timing failure rates",
+        "Interactive timing simulation",
         "Internal links to tools",
-        "Added to sitemap",
-        "bun tsc passes"
+        "Added to sitemap and blog index",
+        "bun tsc && bun build passes"
+      ]
+    },
+    {
+      "id": "SEO-007",
+      "title": "Add VOO vs SPY for DCA Comparison Blog Post",
+      "priority": 12,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: voo-vs-spy-for-dca (2000+ words)",
+        "Targets: VOO vs SPY, best ETF for DCA, Vanguard vs SPDR",
+        "Expense ratio comparison",
+        "10-year cost difference calculator",
+        "Liquidity and spread analysis",
+        "Added to sitemap and blog index",
+        "bun tsc && bun build passes"
+      ]
+    },
+    {
+      "id": "SEO-008",
+      "title": "Add Best DCA Frequency Guide (Daily vs Weekly vs Monthly)",
+      "priority": 13,
+      "passes": false,
+      "acceptanceCriteria": [
+        "Blog post: best-dca-frequency (2000+ words)",
+        "Targets: how often to DCA, weekly vs monthly investing, DCA frequency",
+        "Historical analysis by frequency",
+        "Transaction cost considerations",
+        "Interactive frequency comparison",
+        "Added to sitemap and blog index",
+        "bun tsc && bun build passes"
       ]
     }
   ]
