@@ -87,10 +87,11 @@
         
         <div class="grid md:grid-cols-3 gap-4 mb-6">
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Monthly Investment</label>
+            <label for="ci-monthly-investment" class="block text-sm font-medium text-gray-700 mb-2">Monthly Investment</label>
             <div class="relative">
               <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">$</span>
               <input 
+                id="ci-monthly-investment"
                 type="number" 
                 bind:value={monthlyAmount}
                 class="w-full pl-8 pr-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500"
@@ -101,8 +102,9 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Years Investing</label>
+            <label for="ci-years-investing" class="block text-sm font-medium text-gray-700 mb-2">Years Investing</label>
             <input 
+              id="ci-years-investing"
               type="number" 
               bind:value={years}
               class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500"
@@ -112,8 +114,9 @@
           </div>
           
           <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">Annual Return %</label>
+            <label for="ci-annual-return" class="block text-sm font-medium text-gray-700 mb-2">Annual Return %</label>
             <input 
+              id="ci-annual-return"
               type="number" 
               bind:value={annualReturn}
               class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-green-500"

@@ -2,15 +2,17 @@ import { error } from '@sveltejs/kit';
 import { 
   stripe, 
   STRIPE_WEBHOOK_EVENTS, 
-  verifyWebhookSignature 
+  verifyWebhookSignature,
+  getTierForPriceId,
+  isStripeConfigured
 } from '$lib/server/stripe';
 import { db } from '$lib/server/database';
 import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request }) => {
   try {
-    if (!stripe) {
-      throw error(500, 'Stripe is not configured');
+    if (!stripe || !isStripeConfigured) {
+      throw error(500, 'Stripe is not configured. Check server logs for missing environment variables.');
     }
     
     const signature = request.headers.get('stripe-signature');
@@ -65,10 +67,12 @@ export const POST: RequestHandler = async ({ request }) => {
         let tier: 'free' | 'pro' | 'premium' = 'free';
         if (status === 'active' || status === 'trialing') {
           const priceId = subscription.items.data[0]?.price.id || '';
-          if (priceId.includes('premium')) {
-            tier = 'premium';
-          } else if (priceId.includes('pro')) {
-            tier = 'pro';
+          // Use the proper tier lookup instead of string matching
+          const detectedTier = getTierForPriceId(priceId);
+          if (detectedTier) {
+            tier = detectedTier;
+          } else {
+            console.warn(`Unknown price ID received: ${priceId}`);
           }
         }
         

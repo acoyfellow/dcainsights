@@ -1,6 +1,12 @@
 import { json, error } from '@sveltejs/kit';
-import { stripe, SUBSCRIPTION_PLANS } from '$lib/server/stripe';
-import { createStripeCustomer, createCheckoutSession } from '$lib/server/stripe';
+import { 
+  stripe, 
+  SUBSCRIPTION_PLANS, 
+  createStripeCustomer, 
+  createCheckoutSession,
+  isStripeConfigured,
+  validatePriceId
+} from '$lib/server/stripe';
 import { createUserWithSession, validateSession } from '$lib/server/auth';
 import { db } from '$lib/server/database';
 import type { RequestHandler } from './$types';

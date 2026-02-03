@@ -152,18 +152,18 @@
       
       <div class="grid md:grid-cols-3 gap-6 mb-6">
         <div>
-          <label class="block text-sm font-medium mb-2">Monthly Investment</label>
-          <input type="range" min="50" max="2000" step="50" bind:value={investmentAmount} class="w-full" />
+          <label for="beginner-monthly-investment" class="block text-sm font-medium mb-2">Monthly Investment</label>
+          <input id="beginner-monthly-investment" type="range" min="50" max="2000" step="50" bind:value={investmentAmount} class="w-full" />
           <p class="text-2xl font-bold text-blue-600">${investmentAmount}/mo</p>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-2">Time Period</label>
-          <input type="range" min="5" max="30" step="5" bind:value={years} class="w-full" />
+          <label for="beginner-time-period" class="block text-sm font-medium mb-2">Time Period</label>
+          <input id="beginner-time-period" type="range" min="5" max="30" step="5" bind:value={years} class="w-full" />
           <p class="text-2xl font-bold text-blue-600">{years} years</p>
         </div>
         <div>
-          <label class="block text-sm font-medium mb-2">Expected Return</label>
-          <input type="range" min="6" max="12" step="1" bind:value={avgReturn} class="w-full" />
+          <label for="beginner-expected-return" class="block text-sm font-medium mb-2">Expected Return</label>
+          <input id="beginner-expected-return" type="range" min="6" max="12" step="1" bind:value={avgReturn} class="w-full" />
           <p class="text-2xl font-bold text-blue-600">{avgReturn}%/year</p>
         </div>
       </div>

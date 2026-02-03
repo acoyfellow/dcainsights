@@ -441,10 +441,11 @@
 
       <div class="grid md:grid-cols-3 gap-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="recession-period" class="block text-sm font-medium text-gray-700 mb-2">
             Recession Period
           </label>
           <select
+            id="recession-period"
             bind:value={selectedRecession}
             class="w-full px-3 py-2 border border-gray-300 focus:border-gray-500 focus:ring-0 outline-none appearance-none text-sm"
           >
@@ -455,7 +456,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="recession-investment-amount" class="block text-sm font-medium text-gray-700 mb-2">
             Investment Amount per Period
           </label>
           <div class="relative">
@@ -464,6 +465,7 @@
               >$</span
             >
             <input
+              id="recession-investment-amount"
               type="number"
               bind:value={investmentAmount}
               class="w-full pl-8 pr-4 py-2 border border-gray-300 focus:border-gray-500 focus:ring-0 outline-none text-sm"
@@ -474,10 +476,11 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="recession-investment-frequency" class="block text-sm font-medium text-gray-700 mb-2">
             Investment Frequency
           </label>
           <select
+            id="recession-investment-frequency"
             bind:value={investmentFrequency}
             class="w-full px-3 py-2 border border-gray-300 focus:border-gray-500 focus:ring-0 outline-none appearance-none text-sm"
           >

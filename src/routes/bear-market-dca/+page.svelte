@@ -321,10 +321,11 @@
 
       <div class="grid md:grid-cols-3 gap-6">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="bear-market-period" class="block text-sm font-medium text-gray-700 mb-2">
             Bear Market Period
           </label>
           <select
+            id="bear-market-period"
             bind:value={selectedBearMarket}
             class="w-full px-3 py-2 border border-gray-300 focus:border-gray-500 focus:ring-0 outline-none appearance-none text-sm"
           >
@@ -335,7 +336,7 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="bear-investment-amount" class="block text-sm font-medium text-gray-700 mb-2">
             Investment Amount per Period
           </label>
           <div class="relative">
@@ -344,6 +345,7 @@
               >$</span
             >
             <input
+              id="bear-investment-amount"
               type="number"
               bind:value={investmentAmount}
               class="w-full pl-8 pr-4 py-2 border border-gray-300 focus:border-gray-500 focus:ring-0 outline-none text-sm"
@@ -354,10 +356,11 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">
+          <label for="bear-investment-frequency" class="block text-sm font-medium text-gray-700 mb-2">
             Investment Frequency
           </label>
           <select
+            id="bear-investment-frequency"
             bind:value={investmentFrequency}
             class="w-full px-3 py-2 border border-gray-300 focus:border-gray-500 focus:ring-0 outline-none appearance-none text-sm"
           >

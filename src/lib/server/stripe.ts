@@ -1,29 +1,104 @@
 import Stripe from 'stripe';
 
-// Use test key if available (development mode), otherwise use live key
-const stripeSecretKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_TEST_SECRET_KEY || '';
+// =============================================================================
+// STRIPE CONFIGURATION VALIDATION
+// =============================================================================
 
-if (!stripeSecretKey) {
-  console.warn('Stripe keys not set. Stripe functionality will be disabled.');
+// Environment variable validation
+const REQUIRED_ENV_VARS = [
+  'STRIPE_SECRET_KEY',
+  'STRIPE_PRO_MONTHLY_PRICE_ID',
+  'STRIPE_PRO_YEARLY_PRICE_ID',
+  'STRIPE_PREMIUM_MONTHLY_PRICE_ID',
+  'STRIPE_PREMIUM_YEARLY_PRICE_ID',
+] as const;
+
+const OPTIONAL_ENV_VARS = [
+  'STRIPE_WEBHOOK_SECRET', // Required for webhook processing
+  'STRIPE_TEST_SECRET_KEY', // Deprecated - use STRIPE_SECRET_KEY
+] as const;
+
+// Track which env vars are missing for debugging
+const missingEnvVars: string[] = [];
+const configuredEnvVars: string[] = [];
+
+for (const envVar of REQUIRED_ENV_VARS) {
+  if (!process.env[envVar]) {
+    missingEnvVars.push(envVar);
+  } else {
+    configuredEnvVars.push(envVar);
+  }
 }
 
-export const stripe = stripeSecretKey 
+// Stripe is disabled if required env vars are missing
+export const isStripeConfigured = missingEnvVars.length === 0;
+
+if (!isStripeConfigured) {
+  console.warn(
+    `\n⚠️  STRIPE DISABLED: Missing required environment variables:\n` +
+    `   ${missingEnvVars.join('\n   ')}\n\n` +
+    `   Stripe payment functionality will be unavailable.\n` +
+    `   See docs/STRIPE_SETUP.md for configuration instructions.\n`
+  );
+} else {
+  console.log('✅ Stripe configured successfully');
+}
+
+// Check if webhook secret is configured (separate warning)
+if (isStripeConfigured && !process.env.STRIPE_WEBHOOK_SECRET) {
+  console.warn(
+    '⚠️  STRIPE_WEBHOOK_SECRET not set - webhook signature verification disabled!\n' +
+    '   This is a security risk in production.'
+  );
+}
+
+// =============================================================================
+// STRIPE CLIENT INITIALIZATION
+// =============================================================================
+
+const stripeSecretKey = process.env.STRIPE_SECRET_KEY || '';
+
+export const stripe = isStripeConfigured
   ? new Stripe(stripeSecretKey, {
       apiVersion: '2025-12-15.clover',
       typescript: true,
     })
   : null;
 
-// Check if we're using test mode
-export const isTestMode = !process.env.STRIPE_SECRET_KEY && !!process.env.STRIPE_TEST_SECRET_KEY;
+// Check if we're using test mode (key starts with sk_test_)
+export const isTestMode = stripeSecretKey.startsWith('sk_test_');
 
+if (stripe && isTestMode) {
+  console.log('ℹ️  Stripe is running in TEST MODE');
+}
+
+// =============================================================================
+// SUBSCRIPTION PLANS CONFIGURATION
+// =============================================================================
+
+/**
+ * Subscription plan configuration
+ * 
+ * Price IDs MUST be set via environment variables.
+ * Prices shown here are display values only - actual prices are in Stripe.
+ * 
+ * PRO TIER:
+ *   - Monthly: $9.99/month
+ *   - Yearly: $99.99/year (~$8.33/month, 17% savings)
+ * 
+ * PREMIUM TIER:
+ *   - Monthly: $29.99/month
+ *   - Yearly: $299.99/year (~$25/month, 17% savings)
+ */
 export const SUBSCRIPTION_PLANS = {
   pro: {
     name: 'Pro',
-    priceMonthly: 2900,
-    priceYearly: 29700,
-    priceIdMonthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || 'price_1Sn1ByF1oOQhJ3pzlxhPiKBy',
-    priceIdYearly: process.env.STRIPE_PRO_YEARLY_PRICE_ID || 'price_1Sn1BWF1oOQhJ3pzmrGJ0F05',
+    // Display prices in cents for Stripe compatibility
+    priceMonthly: 999,  // $9.99
+    priceYearly: 9999,  // $99.99
+    // Price IDs from environment variables - NO FALLBACKS
+    priceIdMonthly: process.env.STRIPE_PRO_MONTHLY_PRICE_ID || '',
+    priceIdYearly: process.env.STRIPE_PRO_YEARLY_PRICE_ID || '',
     features: [
       'Advanced analytics dashboard',
       'Custom portfolio tracking',
@@ -37,10 +112,12 @@ export const SUBSCRIPTION_PLANS = {
   },
   premium: {
     name: 'Premium',
-    priceMonthly: 5900,
-    priceYearly: 59700,
-    priceIdMonthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || 'price_1Sn1BzF1oOQhJ3pznyW9RQbf',
-    priceIdYearly: process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID || 'price_1Sn1BlF1oOQhJ3pz9j3iOl22',
+    // Display prices in cents for Stripe compatibility
+    priceMonthly: 2999,  // $29.99
+    priceYearly: 29999,  // $299.99
+    // Price IDs from environment variables - NO FALLBACKS
+    priceIdMonthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || '',
+    priceIdYearly: process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID || '',
     features: [
       'All Pro features',
       'Custom market scenarios',
@@ -56,8 +133,58 @@ export const SUBSCRIPTION_PLANS = {
 
 export type SubscriptionTier = keyof typeof SUBSCRIPTION_PLANS;
 
+// =============================================================================
+// HELPER FUNCTIONS
+// =============================================================================
+
+/**
+ * Validates that a price ID exists in our configuration
+ */
+export function validatePriceId(priceId: string): boolean {
+  const validPriceIds = [
+    SUBSCRIPTION_PLANS.pro.priceIdMonthly,
+    SUBSCRIPTION_PLANS.pro.priceIdYearly,
+    SUBSCRIPTION_PLANS.premium.priceIdMonthly,
+    SUBSCRIPTION_PLANS.premium.priceIdYearly,
+  ];
+  return validPriceIds.includes(priceId) && priceId !== '';
+}
+
+/**
+ * Gets the tier for a given price ID
+ */
+export function getTierForPriceId(priceId: string): SubscriptionTier | null {
+  if (
+    priceId === SUBSCRIPTION_PLANS.pro.priceIdMonthly ||
+    priceId === SUBSCRIPTION_PLANS.pro.priceIdYearly
+  ) {
+    return 'pro';
+  }
+  if (
+    priceId === SUBSCRIPTION_PLANS.premium.priceIdMonthly ||
+    priceId === SUBSCRIPTION_PLANS.premium.priceIdYearly
+  ) {
+    return 'premium';
+  }
+  return null;
+}
+
+// =============================================================================
+// STRIPE API FUNCTIONS
+// =============================================================================
+
+function assertStripeConfigured(): asserts stripe is Stripe {
+  if (!stripe) {
+    throw new Error(
+      'Stripe is not configured. Missing environment variables: ' +
+      missingEnvVars.join(', ')
+    );
+  }
+}
+
 export async function createStripeCustomer(email: string, name?: string) {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
   
   return stripe.customers.create({
     email,
@@ -79,7 +206,13 @@ export async function createCheckoutSession({
   cancelUrl: string;
   mode?: 'subscription' | 'payment';
 }) {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
+  
+  // Validate price ID before creating session
+  if (!validatePriceId(priceId)) {
+    throw new Error(`Invalid price ID: ${priceId}`);
+  }
   
   return stripe.checkout.sessions.create({
     customer: customerId,
@@ -95,7 +228,8 @@ export async function createCheckoutSession({
 }
 
 export async function createCustomerPortalSession(customerId: string, returnUrl: string) {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
   
   return stripe.billingPortal.sessions.create({
     customer: customerId,
@@ -104,17 +238,25 @@ export async function createCustomerPortalSession(customerId: string, returnUrl:
 }
 
 export async function getSubscription(subscriptionId: string) {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
   return stripe.subscriptions.retrieve(subscriptionId);
 }
 
 export async function cancelSubscription(subscriptionId: string) {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
   return stripe.subscriptions.cancel(subscriptionId);
 }
 
 export async function updateSubscription(subscriptionId: string, priceId: string) {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
+  
+  // Validate price ID before updating
+  if (!validatePriceId(priceId)) {
+    throw new Error(`Invalid price ID: ${priceId}`);
+  }
   
   const subscription = await stripe.subscriptions.retrieve(subscriptionId);
   
@@ -123,6 +265,10 @@ export async function updateSubscription(subscriptionId: string, priceId: string
     proration_behavior: 'create_prorations'
   });
 }
+
+// =============================================================================
+// WEBHOOK HANDLING
+// =============================================================================
 
 export const STRIPE_WEBHOOK_EVENTS = {
   CHECKOUT_COMPLETED: 'checkout.session.completed',
@@ -137,6 +283,18 @@ export function verifyWebhookSignature(
   signature: string,
   webhookSecret: string
 ): Stripe.Event {
-  if (!stripe) throw new Error('Stripe is not configured');
+  assertStripeConfigured();
+  if (!stripe) throw new Error("Stripe is not configured");
   return stripe.webhooks.constructEvent(payload, signature, webhookSecret);
 }
+
+// =============================================================================
+// EXPORTS FOR DEBUGGING/TESTING
+// =============================================================================
+
+export const stripeConfig = {
+  isConfigured: isStripeConfigured,
+  isTestMode,
+  missingEnvVars,
+  configuredEnvVars,
+} as const;

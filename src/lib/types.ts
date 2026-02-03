@@ -112,3 +112,70 @@ export const SUBSCRIPTION_PLANS: { pro: SubscriptionPlan; premium: SubscriptionP
     ]
   }
 } as const;
+
+// Course types
+export type CourseTier = 'pro' | 'premium';
+export type UserTier = 'free' | 'pro' | 'premium';
+export type CourseLevel = 'beginner' | 'intermediate' | 'advanced';
+
+export interface Course {
+  id: string;
+  title: string;
+  tier: CourseTier;
+  price: number;
+  billingMonthly: string;
+  duration: string;
+  lessons: number;
+  description: string;
+  objectives: string[];
+  thumbnail: string;
+  instructor: string;
+  level: CourseLevel;
+  tags: string[];
+}
+
+export interface LessonResource {
+  title: string;
+  type: 'pdf' | 'xlsx' | 'video' | 'link';
+  url: string;
+}
+
+export interface Lesson {
+  id: string;
+  courseId: string;
+  title: string;
+  duration: number;
+  order: number;
+  videoUrl: string;
+  transcriptUrl: string;
+  resources: LessonResource[];
+  objectives: string[];
+  description: string;
+}
+
+export interface UserProgress {
+  odUserId: string;
+  lessonId: string;
+  courseId: string;
+  completed: boolean;
+  watchedSeconds: number;
+  lastWatchedAt: number;
+  completedAt?: number;
+}
+
+export interface CourseProgress {
+  courseId: string;
+  userId: string;
+  lessonsCompleted: number;
+  totalLessons: number;
+  percentComplete: number;
+  lastAccessedAt: number;
+}
+
+export interface CoursesData {
+  courses: Course[];
+}
+
+export interface LessonsData {
+  lessons: Lesson[];
+}
